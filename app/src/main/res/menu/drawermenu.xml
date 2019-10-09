@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Tarefas">
+
+        <menu>
+
+            <item
+                android:id="@+id/MenuItemTarefasPendentes"
+                android:icon="@drawable/ic_error_black_24dp"
+                android:title="Tarefas Pendentes" />
+
+            <item
+                android:id="@+id/MenuItemTarefasFeitas"
+                android:icon="@drawable/ic_check_circle_black_24dp"
+                android:title="Tarefas Feitas" />
+
+        </menu>
+
+    </item>
+
+    <item android:title="Opções">
+        <menu>
+
+            <item
+                android:id="@+id/MenuItemSobre"
+                android:icon="@drawable/ic_help_black_24dp"
+                android:title="Sobre"/>
+
+
+
+            <item
+                android:id="@+id/MenuItemSair"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                android:title="Sair"/>
+
+        </menu>
+    </item>
+
+</menu>

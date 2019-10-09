@@ -1,0 +1,59 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+
+
+    </style>
+
+
+
+
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="Tela_Cadastro_Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/CadastroColorPrimary</item>
+        <item name="colorPrimaryDark">@color/CadastroColorPrimaryDark</item>
+        <item name="colorAccent">@color/CadastroColorAccent</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+    </style>
+
+
+
+    <style name="Tela_Login_Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/LoginColorPrimary</item>
+        <item name="colorPrimaryDark">@color/LoginColorPrimaryDark</item>
+        <item name="colorAccent">@color/LoginColorAccent</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+
+    </style>
+
+    <style name="Tela_Form_Theme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/LoginColorPrimary</item>
+        <item name="colorPrimaryDark">@color/LoginColorPrimaryDark</item>
+        <item name="colorAccent">@color/LoginColorAccent</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+
+    </style>
+
+    <style name="TextViewClickable" parent="Widget.AppCompat.EditText" >
+        <item name="android:fontFamily">@font/quicksand</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+</resources>

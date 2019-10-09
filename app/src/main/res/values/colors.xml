@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#000000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+
+    <color name="CadastroColorPrimary">#FFFFFF</color>
+    <color name="CadastroColorPrimaryDark">#000000</color>
+    <color name="CadastroColorAccent">#000000</color>
+
+
+    <color name="LoginColorPrimary">#FFFFFF</color>
+    <color name="LoginColorPrimaryDark">#000000</color>
+    <color name="LoginColorAccent">#000000</color>
+</resources>
