@@ -58,6 +58,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/quicksand"
             android:imeOptions="actionDone"
+            android:maxLines="1"
+
             />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,6 +84,7 @@
         android:layout_height="wrap_content"
         android:textStyle="italic"
         android:text="Powered by Concrete Solutions"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

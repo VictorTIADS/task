@@ -13,4 +13,7 @@
     <color name="LoginColorPrimary">#FFFFFF</color>
     <color name="LoginColorPrimaryDark">#000000</color>
     <color name="LoginColorAccent">#000000</color>
+
+    <color name="colorGreen">#49E20E</color>
+    <color name="colorRed">#FF0000</color>
 </resources>

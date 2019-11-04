@@ -13,5 +13,8 @@ class TaskConstants {
         val TODO = 0
 
     }
+    object REQUEST{
+        val CODE_PICTURE = 0
+    }
 
 }
