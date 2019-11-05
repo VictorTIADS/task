@@ -17,4 +17,6 @@ class TaskConstants {
         val CODE_PICTURE = 0
     }
 
+
+
 }

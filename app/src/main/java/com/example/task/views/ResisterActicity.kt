@@ -23,11 +23,11 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.example.task.R
 
 
+
 class ResisterActicity : AppCompatActivity() {
 
 
     lateinit var uriImage:Uri
-    lateinit var pd:ProgressDialog
 
 
 
@@ -40,12 +40,14 @@ class ResisterActicity : AppCompatActivity() {
         controlEnable(false)
 
 
+
+
         btnBack.setOnClickListener {
             finish()
 
         }
         btnCadastrar.setOnClickListener {
-            startDialog("Carregando...",this)
+            LOAD.startDialog("Carregando...",this)
             SignUpUser()
 
 
@@ -79,6 +81,7 @@ class ResisterActicity : AppCompatActivity() {
             val emailUser = txtEmail.text.toString()
             val passwordUser = txtCadastroPassword.text.toString()
             createFireUser(emailUser,passwordUser,uriImage,nameUser)
+            callMainActivity()
 
 
 
@@ -88,6 +91,9 @@ class ResisterActicity : AppCompatActivity() {
         }catch (e:ValidationException){
             throw e
         }
+
+    }
+    private fun callMainActivity(){
 
     }
 
@@ -110,16 +116,23 @@ class ResisterActicity : AppCompatActivity() {
 
     }
 
-    private fun startDialog(message:String,context: Context){
-        pd = ProgressDialog(context)
-        pd.setMessage(message)
-        pd.setCancelable(false)
-        pd.show()
+    object LOAD{
+
+        lateinit var pd:ProgressDialog
+
+        fun startDialog(message:String,context: Context){
+            pd = ProgressDialog(context)
+            pd.setMessage(message)
+            pd.setCancelable(false)
+            pd.show()
+        }
+
+        fun stopLoadingDialog(){
+            pd.cancel()
+        }
+
     }
 
-    fun stopLoadingDialog(){
-        pd.cancel()
-    }
 
 
 

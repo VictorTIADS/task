@@ -72,7 +72,7 @@ private fun addingFireStoreToUser(id:String,userName: String,photo: String){
         .addOnSuccessListener(object :OnSuccessListener<DocumentReference>{
             override fun onSuccess(document: DocumentReference?) {
                 Log.i("aspk",document?.id.toString())
-
+                ResisterActicity.LOAD.stopLoadingDialog()
 
             }
         })
