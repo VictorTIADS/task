@@ -1,30 +1,33 @@
 package com.example.task.views
 
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.example.task.R
 import com.example.task.constants.TaskConstants
 import com.example.task.firebase.createFireUser
-import com.example.task.firebase.isValid
-import com.example.task.firebase.setError
-import com.example.task.firebase.upLoadPhotoToFirebaseStorage
 import com.example.task.util.ValidationException
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_resister_acticity.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.toast
-import org.jetbrains.anko.indeterminateProgressDialog as indeterminateProgressDialog1
+import org.jetbrains.anko.progressDialog
+import androidx.core.app.ComponentActivity
+import androidx.core.app.ComponentActivity.ExtraData
+import androidx.core.content.ContextCompat.getSystemService
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import com.example.task.R
+
 
 class ResisterActicity : AppCompatActivity() {
 
 
     lateinit var uriImage:Uri
+    lateinit var pd:ProgressDialog
 
 
 
@@ -36,13 +39,15 @@ class ResisterActicity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         controlEnable(false)
 
+
         btnBack.setOnClickListener {
             finish()
 
         }
         btnCadastrar.setOnClickListener {
-
+            startDialog("Carregando...",this)
             SignUpUser()
+
 
         }
         userImage.setOnClickListener {
@@ -73,7 +78,7 @@ class ResisterActicity : AppCompatActivity() {
             val nameUser = txtNome.text.toString()
             val emailUser = txtEmail.text.toString()
             val passwordUser = txtCadastroPassword.text.toString()
-            createFireUser(emailUser,passwordUser,uriImage)
+            createFireUser(emailUser,passwordUser,uriImage,nameUser)
 
 
 
@@ -105,8 +110,20 @@ class ResisterActicity : AppCompatActivity() {
 
     }
 
+    private fun startDialog(message:String,context: Context){
+        pd = ProgressDialog(context)
+        pd.setMessage(message)
+        pd.setCancelable(false)
+        pd.show()
+    }
+
+    fun stopLoadingDialog(){
+        pd.cancel()
+    }
+
 
 
 
 
 }
+
