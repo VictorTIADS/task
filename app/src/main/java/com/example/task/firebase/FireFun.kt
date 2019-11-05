@@ -2,12 +2,17 @@ package com.example.task.firebase
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import com.example.task.constants.TaskConstants
+import com.example.task.util.SecurityPreferences
 import com.example.task.util.ValidationException
+import com.example.task.views.MainActivity
 import com.example.task.views.ResisterActicity
+import com.example.task.views.mContext
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -23,12 +28,14 @@ import org.jetbrains.anko.indeterminateProgressDialog
 import java.lang.Exception
 import java.util.*
 
-lateinit var alert:Unit
 
-fun createFireUser(email:String,senha:String,uri: Uri,userName:String){
+
+
+fun createFireUser(email:String,senha:String,uri: Uri,userName:String,context: Context,success:()->Unit){
+    ResisterActicity.LOAD.updateDialogMessage("Cadastrando...")
     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha).addOnCompleteListener(object :OnCompleteListener<AuthResult>{
         override fun onComplete(p0: Task<AuthResult>) {
-
+            success()
         }
 
     }).addOnFailureListener(object :OnFailureListener{
@@ -38,24 +45,26 @@ fun createFireUser(email:String,senha:String,uri: Uri,userName:String){
     }).addOnSuccessListener(object :OnSuccessListener<AuthResult>{
         override fun onSuccess(p0: AuthResult?) {
             Log.i("aspk",p0?.user?.email.toString())
-            upLoadPhotoToFirebaseStorage(uri,userName)
-
         }
     })
 }
 
 fun getRandomCode() = UUID.randomUUID().toString()
 
-private fun upLoadPhotoToFirebaseStorage(uri: Uri,userName: String) {
+fun upLoadPhotoToFirebaseStorage(uri: Uri,userName: String,email: String,context: Context,success:(uid:String,uriDownload:String)->Unit) {
+    ResisterActicity.LOAD.updateDialogMessage("Uploading Foto...")
     val filename = getRandomCode()
     val ref = FirebaseStorage.getInstance().getReference("/images/" + filename)
     ref.putFile(uri)
         .addOnSuccessListener(object :OnSuccessListener<UploadTask.TaskSnapshot>{
             override fun onSuccess(newUri: UploadTask.TaskSnapshot?) {
-
-                Log.i("aspk",newUri.toString())
-
-                addingFireStoreToUser(FirebaseAuth.getInstance().uid!!,userName,newUri.toString())
+                ref.downloadUrl.addOnSuccessListener(object :OnSuccessListener<Uri>{
+                    override fun onSuccess(uriDownload: Uri?) {
+                        Log.i("aspk",uriDownload.toString())
+                        ResisterActicity.LOAD.updateDialogMessage("Upload Sucessfull")
+                        success(FirebaseAuth.getInstance().uid!!,uriDownload.toString())
+                    }
+                })
             }
         })
         .addOnFailureListener(object :OnFailureListener{
@@ -65,30 +74,36 @@ private fun upLoadPhotoToFirebaseStorage(uri: Uri,userName: String) {
         })
 
 }
-private fun addingFireStoreToUser(id:String,userName: String,photo: String){
-    val newUser = MyUser(id,userName,photo)
+ fun addingFireStoreToUser(id:String,userName: String,photo: String,email: String,context: Context,success:(user:MyUser)->Unit){
+    ResisterActicity.LOAD.updateDialogMessage("Finalizando Cadastro...")
+    val newUser = MyUser(id,userName,email,photo)
     FirebaseFirestore.getInstance().collection("users")
         .add(newUser)
         .addOnSuccessListener(object :OnSuccessListener<DocumentReference>{
             override fun onSuccess(document: DocumentReference?) {
                 Log.i("aspk",document?.id.toString())
                 ResisterActicity.LOAD.stopLoadingDialog()
-
+                success(newUser)
             }
         })
         .addOnFailureListener(object :OnFailureListener{
             override fun onFailure(e: Exception) {
                 Log.i("aspk",e.toString())
-
             }
         })
 }
-
-
 
 fun TextView.isValid():Boolean{
     return this.text.isNullOrEmpty() || this.text.isNullOrBlank()}
 
 fun TextInputLayout.setError(e:String){
     this.error = e
+}
+
+fun verifyAuthentication():Boolean{
+   return  FirebaseAuth.getInstance().uid!=null
+}
+
+fun signOutFirebase(){
+    FirebaseAuth.getInstance().signOut()
 }

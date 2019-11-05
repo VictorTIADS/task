@@ -15,6 +15,8 @@ import com.example.task.R
 import com.example.task.business.PriorityBusiness
 import com.example.task.constants.PriorityCacheConstants
 import com.example.task.constants.TaskConstants
+import com.example.task.firebase.signOutFirebase
+import com.example.task.firebase.verifyAuthentication
 import com.example.task.util.SecurityPreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header.*
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
                     val box = alert("Você está prestes a sair.", "Deseja realmente sair?") {
                         yesButton {
                             mSecurityPreferences.clear()
+                            signOutFirebase()
                             startActivity(Intent(baseContext, LoginActivity::class.java))
                             finish()
                         }
@@ -67,13 +70,13 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                R.id.MenuItemTarefasFeitas->{
+                R.id.MenuItemTarefasFeitas -> {
                     TaskListFragment.newInstance(TaskConstants.TASK_FILTER.COMPLETE)
                     toast("as")
 
                     true
                 }
-                R.id.MenuItemTarefasPendentes->{
+                R.id.MenuItemTarefasPendentes -> {
                     TaskListFragment.newInstance(TaskConstants.TASK_FILTER.TODO)
                     true
                 }
@@ -85,29 +88,24 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-
-
         }
 
 
-
-
     }
 
-    private fun loadPriorityCache(){
+    private fun loadPriorityCache() {
         PriorityCacheConstants.setCache(mPriorityBusiness.getList())
     }
 
-    private  fun startDefaultFragment(){
-        var fragment :Fragment = TaskListFragment.newInstance(TaskConstants.TASK_FILTER.TODO)
-        supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain,fragment).commit()
-
+    private fun startDefaultFragment() {
+        var fragment: Fragment = TaskListFragment.newInstance(TaskConstants.TASK_FILTER.TODO)
+        supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, fragment).commit()
 
 
     }
 
-    fun startSomeFragment(instance:TaskListFragment){
-        supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain,instance).commit()
+    fun startSomeFragment(instance: TaskListFragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, instance).commit()
     }
 
 

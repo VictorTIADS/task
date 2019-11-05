@@ -1,5 +1,6 @@
 package com.example.task.views
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -7,27 +8,27 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import com.example.task.constants.TaskConstants
-import com.example.task.firebase.createFireUser
 import com.example.task.util.ValidationException
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_resister_acticity.*
-import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.progressDialog
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.example.task.R
-
+import com.example.task.firebase.*
+import com.example.task.util.SecurityPreferences
+import com.google.firebase.auth.FirebaseAuth
+import org.jetbrains.anko.toast
 
 
 class ResisterActicity : AppCompatActivity() {
 
 
     lateinit var uriImage:Uri
+    lateinit var mSharedPreferences: SecurityPreferences
+
 
 
 
@@ -37,7 +38,9 @@ class ResisterActicity : AppCompatActivity() {
         txtCadastroPassword.transformationMethod = PasswordTransformationMethod()
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        controlEnable(false)
+        initSharedPreferences(this)
+
+        controlEnableComponents(false)
 
 
 
@@ -47,7 +50,7 @@ class ResisterActicity : AppCompatActivity() {
 
         }
         btnCadastrar.setOnClickListener {
-            LOAD.startDialog("Carregando...",this)
+            LOAD.startDialog("Por Favor, Aguarde...",this)
             SignUpUser()
 
 
@@ -65,7 +68,7 @@ class ResisterActicity : AppCompatActivity() {
                 if(data?.data!=null){
                     setImageWithPicasso(data?.data!!)
                     uriImage = data?.data!!
-                    controlEnable(true)
+                    controlEnableComponents(true)
 
 
                 }
@@ -80,8 +83,15 @@ class ResisterActicity : AppCompatActivity() {
             val nameUser = txtNome.text.toString()
             val emailUser = txtEmail.text.toString()
             val passwordUser = txtCadastroPassword.text.toString()
-            createFireUser(emailUser,passwordUser,uriImage,nameUser)
-            callMainActivity()
+            createFireUser(emailUser,passwordUser,uriImage,nameUser,this){
+                upLoadPhotoToFirebaseStorage(uriImage,nameUser,emailUser,this){uid,uri->
+                    addingFireStoreToUser(uid,nameUser,uri,emailUser,this){
+                        storeStringsOnSharedPreferences(it)
+                        callMainActivity()
+                    }
+                }
+            }
+
 
 
 
@@ -94,6 +104,9 @@ class ResisterActicity : AppCompatActivity() {
 
     }
     private fun callMainActivity(){
+        val callMain = Intent(this,MainActivity::class.java)
+        startActivity(callMain)
+        finish()
 
     }
 
@@ -107,7 +120,7 @@ class ResisterActicity : AppCompatActivity() {
     }
 
 
-    private fun controlEnable(control:Boolean){
+    private fun controlEnableComponents(control:Boolean){
         txtNome.isEnabled = control
         txtEmail.isEnabled = control
         txtCadastroPassword.isEnabled = control
@@ -115,10 +128,22 @@ class ResisterActicity : AppCompatActivity() {
         if (control) {txtNome.requestFocus()}
 
     }
+    private fun initSharedPreferences(context: Context){
+        mSharedPreferences = SecurityPreferences(context)
+    }
+    private fun storeStringsOnSharedPreferences(user:MyUser){
+
+        mSharedPreferences.storeString(TaskConstants.KEY.USER_ID,user.userId)
+        mSharedPreferences.storeString(TaskConstants.KEY.USER_NAME,user.userName)
+        mSharedPreferences.storeString(TaskConstants.KEY.USER_EMAIL,user.userEmail)
+        mSharedPreferences.storeString(TaskConstants.KEY.USER_PROFILE,user.userProfile)
+
+    }
 
     object LOAD{
 
         lateinit var pd:ProgressDialog
+
 
         fun startDialog(message:String,context: Context){
             pd = ProgressDialog(context)
@@ -126,12 +151,22 @@ class ResisterActicity : AppCompatActivity() {
             pd.setCancelable(false)
             pd.show()
         }
+        fun updateDialogMessage(message: String){
+            pd.setMessage(message)
+
+        }
 
         fun stopLoadingDialog(){
             pd.cancel()
         }
 
+
+
+
     }
+
+
+
 
 
 
