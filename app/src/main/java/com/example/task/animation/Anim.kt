@@ -105,6 +105,78 @@ fun View.startAniminShowingComponentLoader(ended: () -> Unit) {
 
 }
 
+fun View.startAnimnLoadingStatusMoving(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(1000)
+        .alpha(1f)
+        .translationY(100f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+fun View.startAnimnLoadingStatusHiding(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(500)
+        .alpha(0f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+
+fun View.animationMasterSlow(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(500)
+        .alpha(0f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+
 fun View.visibleGone() {
     this.visibility = View.GONE
 }

@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -25,8 +26,11 @@ import com.example.task.viewmodel.ResisterViewModel
 class ResisterActicity : AppCompatActivity() {
 
     lateinit var uriImage: Uri
-    lateinit var mSharedPreferences: SecurityPreferences
+
     lateinit var viewModel: ResisterViewModel
+    lateinit var userName: String
+    lateinit var emailUser: String
+    lateinit var passwordUser: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +38,10 @@ class ResisterActicity : AppCompatActivity() {
         txtCadastroPassword.transformationMethod = PasswordTransformationMethod()
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        initSharedPreferences(this)
+
 
         viewModel = ViewModelProviders.of(this).get(ResisterViewModel::class.java)
+        viewModel.initSharedPreferences(this)
 
         controlEnableComponents(false)
 
@@ -50,7 +55,6 @@ class ResisterActicity : AppCompatActivity() {
         btnCadastrar.setOnClickListener {
             startAnimation()
             SignUpUser()
-
 
 
         }
@@ -68,6 +72,7 @@ class ResisterActicity : AppCompatActivity() {
         lblUserName.startAniminShowingComponentLabels { }
         lblUserEmail.startAniminShowingComponentLabels { }
         loadingPhoto.startAniminShowingComponentLoader { }
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -92,10 +97,11 @@ class ResisterActicity : AppCompatActivity() {
             when (it.status) {
                 BaseModel.Companion.STATUS.LOADING -> {
                     Log.i("aspk", "LOADING AUTHENTICATION")
-
+                    animStatusLoading("Carregando Autenticação...")
                 }
                 BaseModel.Companion.STATUS.SUCCESS -> {
                     Log.i("aspk", "SUCCESS AUTHENTICATION")
+                    hideStatusLoading()
                     viewModel.upLoadPhoto(uriImage)
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
@@ -107,10 +113,15 @@ class ResisterActicity : AppCompatActivity() {
             when (it.status) {
                 BaseModel.Companion.STATUS.LOADING -> {
                     Log.i("aspk", "LOADING UPLOAD PHOTO")
+                    animStatusLoading("Carregando Foto...")
+
 
                 }
                 BaseModel.Companion.STATUS.SUCCESS -> {
                     Log.i("aspk", "SUCCESS UPLOADING PHOTO")
+                    hideStatusLoading()
+                    viewModel.resisterMyUserOnFireStore()
+
 
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
@@ -118,17 +129,49 @@ class ResisterActicity : AppCompatActivity() {
                 }
             }
         })
+        viewModel.finalUser.observe(this, Observer {
+            when (it.status) {
+                BaseModel.Companion.STATUS.LOADING -> {
+                    Log.i("aspk", "LOADING FIRESTORE USER")
+                    animStatusLoading("Finalizado Autenticação...")
+
+                }
+                BaseModel.Companion.STATUS.SUCCESS -> {
+                    Log.i("aspk", "SUCCESS FIRESTORE USER")
+                    animStatusLoading("Bem Vindo(a)...")
+                    animationMaster()
+
+
+
+
+
+                }
+                BaseModel.Companion.STATUS.ERROR -> {
+                    Log.i("aspk", "ERROR FIRESTORE USER")
+                }
+            }
+        })
+
+    }
+
+    private fun animationMaster(){
+        userImage.animationMasterSlow {  }
+        lblUserName.animationMasterSlow {  }
+        lblUserEmail.animationMasterSlow {  }
+        lblStatusLoading.animationMasterSlow {  }
+        loadingPhoto.animationMasterSlow { callMainActivity() }
+
 
     }
 
 
     private fun SignUpUser() {
 
-        val nameUser = txtNome.text.toString()
-        val emailUser = txtEmail.text.toString()
-        val passwordUser = txtCadastroPassword.text.toString()
+        userName = txtNome.text.toString()
+        emailUser = txtEmail.text.toString()
+        passwordUser = txtCadastroPassword.text.toString()
 
-        viewModel.signUpUser(emailUser, passwordUser)
+        viewModel.signUpUser(emailUser, passwordUser,userName)
 
 
 //            createFireUser(emailUser,passwordUser,uriImage,nameUser,this){
@@ -172,18 +215,8 @@ class ResisterActicity : AppCompatActivity() {
 
     }
 
-    private fun initSharedPreferences(context: Context) {
-        mSharedPreferences = SecurityPreferences(context)
-    }
 
-    private fun storeStringsOnSharedPreferences(user: MyUser) {
 
-        mSharedPreferences.storeString(TaskConstants.KEY.USER_ID, user.userId)
-        mSharedPreferences.storeString(TaskConstants.KEY.USER_NAME, user.userName)
-        mSharedPreferences.storeString(TaskConstants.KEY.USER_EMAIL, user.userEmail)
-        mSharedPreferences.storeString(TaskConstants.KEY.USER_PROFILE, user.userProfile)
-
-    }
 
     private fun hideComponents() {
         toolbar.startAniminHidingComponent {
@@ -206,6 +239,14 @@ class ResisterActicity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun animStatusLoading(text:String){
+        lblStatusLoading.text = text
+        lblStatusLoading.startAnimnLoadingStatusMoving {}
+    }
+    private fun hideStatusLoading(){
+        lblStatusLoading.startAnimnLoadingStatusHiding {  }
     }
 
     object LOAD {
@@ -231,6 +272,7 @@ class ResisterActicity : AppCompatActivity() {
 
 
     }
+
 
 
 }

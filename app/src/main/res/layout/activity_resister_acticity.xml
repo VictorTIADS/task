@@ -66,7 +66,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userImage"
         android:layout_width="148dp"
-        app:civ_border_color="#ffffff"
+        app:civ_border_color="#000000"
         android:layout_height="128dp"
         android:src="@drawable/defaultuser"
         app:civ_border_width="1dp"
@@ -224,6 +224,20 @@
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="@id/lblUserName"
         app:layout_constraintRight_toRightOf="@id/lblUserName"/>
+    <TextView
+        android:id="@+id/lblStatusLoading"
+        android:alpha="0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13dp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/lblUserEmail"
+        android:layout_marginTop="70dp"
+        app:layout_constraintLeft_toLeftOf="@id/lblUserEmail"
+        app:layout_constraintRight_toRightOf="@id/lblUserEmail"/>
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

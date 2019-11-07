@@ -31,6 +31,7 @@
         <item name="colorPrimaryDark">@color/CadastroColorPrimaryDark</item>
         <item name="colorAccent">@color/CadastroColorAccent</item>
         <item name="android:fontFamily">@font/quicksand</item>
+
     </style>
 
 
