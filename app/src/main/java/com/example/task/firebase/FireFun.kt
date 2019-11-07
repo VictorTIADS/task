@@ -1,18 +1,12 @@
 package com.example.task.firebase
 
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.util.Log
-import android.view.View
 import android.widget.TextView
-import com.example.task.constants.TaskConstants
-import com.example.task.util.SecurityPreferences
+import com.example.task.model.MyUser
 import com.example.task.util.ValidationException
-import com.example.task.views.MainActivity
 import com.example.task.views.ResisterActicity
-import com.example.task.views.mContext
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -20,22 +14,22 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
-import org.jetbrains.anko.indeterminateProgressDialog
 import java.lang.Exception
 import java.util.*
 
 
 
 
-fun createFireUser(email:String,senha:String,uri: Uri,userName:String,context: Context,success:()->Unit){
+fun createFireUser(email:String,senha:String,uri: Uri,userName:String,success:(mUser:FirebaseUser?)->Unit){
     ResisterActicity.LOAD.updateDialogMessage("Cadastrando...")
     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha).addOnCompleteListener(object :OnCompleteListener<AuthResult>{
         override fun onComplete(p0: Task<AuthResult>) {
-            success()
+            success(p0.result?.user)
         }
 
     }).addOnFailureListener(object :OnFailureListener{
@@ -74,9 +68,9 @@ fun upLoadPhotoToFirebaseStorage(uri: Uri,userName: String,email: String,context
         })
 
 }
- fun addingFireStoreToUser(id:String,userName: String,photo: String,email: String,context: Context,success:(user:MyUser)->Unit){
+ fun addingFireStoreToUser(id:String,userName: String,photo: String,email: String,context: Context,success:(user: MyUser)->Unit){
     ResisterActicity.LOAD.updateDialogMessage("Finalizando Cadastro...")
-    val newUser = MyUser(id,userName,email,photo)
+    val newUser = MyUser(id, userName, email, photo)
     FirebaseFirestore.getInstance().collection("users")
         .add(newUser)
         .addOnSuccessListener(object :OnSuccessListener<DocumentReference>{

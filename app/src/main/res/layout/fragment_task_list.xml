@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="12dp"
-
         app:srcCompat="@drawable/plus" />
 
     <androidx.recyclerview.widget.RecyclerView

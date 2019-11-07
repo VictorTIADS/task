@@ -9,6 +9,7 @@ import com.example.task.R
 import com.example.task.business.UserBusiness
 import com.example.task.constants.TaskConstants
 import com.example.task.util.SecurityPreferences
+import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.longSnackbar
 
@@ -19,6 +20,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         mUserBusiness = UserBusiness(this)
         mSecurityPreferences = SecurityPreferences(this)
         isLogedIn()
