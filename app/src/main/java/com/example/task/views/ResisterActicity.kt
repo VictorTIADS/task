@@ -34,6 +34,7 @@ class ResisterActicity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_resister_acticity)
         txtCadastroPassword.transformationMethod = PasswordTransformationMethod()
         val toolbar: Toolbar = findViewById(R.id.toolbar)

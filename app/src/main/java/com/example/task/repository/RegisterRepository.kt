@@ -1,11 +1,7 @@
 package com.example.task.repository
 
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
-import com.example.task.firebase.getRandomCode
-import com.example.task.model.BaseModel
 import com.example.task.model.MyUser
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentReference
@@ -37,7 +33,7 @@ class RegisterRepository{
                     success(it)
                 }
                     .addOnFailureListener {
-
+                        error()
                     }
             }
             .addOnFailureListener{
@@ -53,7 +49,7 @@ class RegisterRepository{
 
             }
             .addOnFailureListener {
-
+                error()
             }
     }
     fun getRandomCoding() = UUID.randomUUID().toString()

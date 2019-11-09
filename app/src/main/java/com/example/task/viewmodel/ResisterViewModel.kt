@@ -9,9 +9,6 @@ import com.example.task.model.BaseModel
 import com.example.task.model.MyUser
 import com.example.task.repository.RegisterRepository
 import com.example.task.util.SecurityPreferences
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.firestore.auth.User
-import java.util.*
 
 class ResisterViewModel : ViewModel() {
 
@@ -25,7 +22,6 @@ class ResisterViewModel : ViewModel() {
     fun signUpUser(userEmail: String, userPwd: String,userName: String) {
         mUser.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING)
         service.signUpUser(userEmail, userPwd, {
-
             mUser.value = BaseModel(MyUser(it), BaseModel.Companion.STATUS.SUCCESS)
             mUser?.value?.data?.userName = userName
         }, {
@@ -36,7 +32,6 @@ class ResisterViewModel : ViewModel() {
     fun upLoadPhoto(uriImage:Uri) {
         savePhoto.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING)
         service.upLoadPhotoOnFirebase(uriImage,{
-
             mUser.value?.data?.userProfile = it.toString()
             savePhoto.value = BaseModel(it, BaseModel.Companion.STATUS.SUCCESS)
         }, {
@@ -49,6 +44,7 @@ class ResisterViewModel : ViewModel() {
         service.createClassOnFireStore(mUser.value?.data!!,{
             finalUser.value = BaseModel(mUser?.value?.data,BaseModel.Companion.STATUS.SUCCESS)
             storeStringsOnSharedPreferences(finalUser.value!!.data!!)
+
         },{
 
         })
