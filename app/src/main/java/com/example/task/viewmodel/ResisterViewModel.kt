@@ -55,13 +55,10 @@ class ResisterViewModel : ViewModel() {
     }
 
     private fun storeStringsOnSharedPreferences(user: MyUser) {
-
         mSharedPreferences.storeString(TaskConstants.KEY.USER_ID, user.userId)
         mSharedPreferences.storeString(TaskConstants.KEY.USER_NAME, user.userName)
         mSharedPreferences.storeString(TaskConstants.KEY.USER_EMAIL, user.userEmail)
         mSharedPreferences.storeString(TaskConstants.KEY.USER_PROFILE, user.userProfile)
-
-
     }
 
 

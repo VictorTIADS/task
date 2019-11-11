@@ -22,6 +22,7 @@ class RegisterRepository{
                 error(it.message)
 
             }
+
     }
 
     fun upLoadPhotoOnFirebase(uriImage:Uri,success: (uriDownload:Uri) -> Unit, error: () -> Unit){
