@@ -26,7 +26,6 @@ import com.example.task.viewmodel.ResisterViewModel
 class ResisterActicity : AppCompatActivity() {
 
     lateinit var uriImage: Uri
-
     lateinit var viewModel: ResisterViewModel
     lateinit var userName: String
     lateinit var emailUser: String

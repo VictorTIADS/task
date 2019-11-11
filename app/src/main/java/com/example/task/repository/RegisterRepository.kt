@@ -53,6 +53,17 @@ class RegisterRepository{
                 error()
             }
     }
+
     fun getRandomCoding() = UUID.randomUUID().toString()
+
+    fun signInUser(email:String,password:String,success: (FirebaseUser?) -> Unit, error: (String?) -> Unit){
+        auth.signInWithEmailAndPassword(email,password)
+            .addOnSuccessListener {
+                success(it.user)
+            }
+            .addOnFailureListener {
+                error(it.message)
+            }
+    }
 
 }

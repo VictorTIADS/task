@@ -1,6 +1,5 @@
 package com.example.task.views
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
@@ -10,17 +9,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.task.R
-import com.example.task.business.UserBusiness
-import com.example.task.constants.TaskConstants
+import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
-import com.example.task.repository.callActivityFinishingthis
-import com.example.task.util.SecurityPreferences
 import com.example.task.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.toast
 
 class LoginActivity : AppCompatActivity() {
 
@@ -38,31 +31,72 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             handleLogin()
         }
+
+
     }
-    private fun setObservable(){
+
+    private fun setObservable() {
         viewModel.safeState.observe(this, Observer {
-            when(it.status){
-                StateLog.Companion.STATE.LOGDED ->{
-                    Log.i("aspk","USUÁRIO LOGADO")
+            when (it.status) {
+                StateLog.Companion.STATE.LOGDED -> {
+                    Log.i("aspk", "USUÁRIO LOGADO")
                     callMainactivity()
 
 
                 }
-                StateLog.Companion.STATE.NOTLOGED ->{
-                    Log.i("aspk","USUÁRIO NÃO LOGADO")
+                StateLog.Companion.STATE.NOTLOGED -> {
+                    Log.i("aspk", "USUÁRIO NÃO LOGADO")
+                }
+            }
+        })
+        viewModel.currentUser.observe(this, Observer {
+            when (it.status) {
+                BaseModel.Companion.STATUS.LOADING -> {
+                    controlVisible(BaseModel.Companion.STATUS.LOADING)
+                }
+                BaseModel.Companion.STATUS.SUCCESS -> {
+                    controlVisible(BaseModel.Companion.STATUS.LOADING)
+                    callMainactivity()
+                }
+                BaseModel.Companion.STATUS.ERROR -> {
+                    controlVisible(BaseModel.Companion.STATUS.ERROR)
+
                 }
             }
         })
     }
 
-    private fun callMainactivity(){
-        startActivity(Intent(this,MainActivity::class.java))
+    private fun controlVisible(status: BaseModel.Companion.STATUS) {
+        when (status) {
+            BaseModel.Companion.STATUS.LOADING -> {
+                btnLogin.text = null
+                btnLogin.isEnabled = false
+                loadingSignIn.visibility = View.VISIBLE
+            }
+            BaseModel.Companion.STATUS.SUCCESS -> {
+                btnLogin.text = "LOGIN"
+                btnLogin.isEnabled = true
+                loadingSignIn.visibility = View.GONE
+            }
+            BaseModel.Companion.STATUS.ERROR -> {
+                btnLogin.text = "LOGIN"
+                btnLogin.isEnabled = true
+                loadingSignIn.visibility = View.GONE
+            }
+
+
+        }
+
+
+    }
+
+    private fun callMainactivity() {
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
 
-
-    private fun configureTextInputPassword(){
+    private fun configureTextInputPassword() {
         //txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
         txtLoginPassword.transformationMethod = PasswordTransformationMethod()
     }
@@ -76,17 +110,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun handleLogin() {
         val email = txtLoginEmail.text.toString()
-        val senha = txtLoginPassword.text.toString()
-
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, senha)
-            .addOnSuccessListener {
-                val intentMain = Intent(this, MainActivity::class.java)
-                startActivity(intentMain)
-                finish()
-            }
-            .addOnFailureListener {
-
-            }
+        val password = txtLoginPassword.text.toString()
+        viewModel.signIn(email, password)
     }
 
 

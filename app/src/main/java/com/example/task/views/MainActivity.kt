@@ -19,6 +19,7 @@ import com.example.task.constants.PriorityCacheConstants
 import com.example.task.constants.TaskConstants
 import com.example.task.model.MyUser
 import com.example.task.util.SecurityPreferences
+import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Cache
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                     val box = alert("Você está prestes a sair.", "Deseja realmente sair?") {
                         yesButton {
                             mSecurityPreferences.clear()
+                            FirebaseAuth.getInstance().signOut()
                             startActivity(Intent(baseContext, LoginActivity::class.java))
                             finish()
                         }
