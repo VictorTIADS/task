@@ -13,12 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.example.task.R
 import com.example.task.business.PriorityBusiness
 import com.example.task.constants.PriorityCacheConstants
 import com.example.task.constants.TaskConstants
 import com.example.task.model.MyUser
 import com.example.task.util.SecurityPreferences
+import com.example.task.viewmodel.MainViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Cache
 import com.squareup.picasso.Picasso
@@ -34,13 +36,14 @@ import org.jetbrains.anko.yesButton
 class MainActivity : AppCompatActivity() {
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var mToggle: ActionBarDrawerToggle
-    private lateinit var mSecurityPreferences: SecurityPreferences
     private lateinit var mPriorityBusiness: PriorityBusiness
+    private lateinit var viewModel:MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mSecurityPreferences = SecurityPreferences(this)
+        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewModel.initSharedPreferences(this)
         mPriorityBusiness = PriorityBusiness(this)
         mDrawerLayout = findViewById(R.id.drawer)
         mToggle = ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close)
@@ -54,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.MenuItemSair -> {
                     val box = alert("Você está prestes a sair.", "Deseja realmente sair?") {
                         yesButton {
-                            mSecurityPreferences.clear()
+                            viewModel.clearSharedPreferences()
                             FirebaseAuth.getInstance().signOut()
                             startActivity(Intent(baseContext, LoginActivity::class.java))
                             finish()
@@ -105,12 +108,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setNameAndEmailInTheHeaderMenu() {
-        lblNameHeaderMenu.text = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_NAME)
-        lblEmailHeaderMenu.text = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_EMAIL)
+        lblNameHeaderMenu.text = viewModel.getNameCurrentUser()
+        lblEmailHeaderMenu.text = viewModel.getEmailCurrentUser()
     }
 
     private fun setImageProfileWithPicasso() {
-        Picasso.get().load(mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_PROFILE))
+        Picasso.get().load(viewModel.getPhotoCurrentUser())
             .placeholder(R.drawable.user_default).centerCrop().resize(500, 500).into(profileImage)
     }
 

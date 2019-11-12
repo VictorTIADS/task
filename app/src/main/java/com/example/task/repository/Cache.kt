@@ -6,8 +6,8 @@ import com.example.task.model.MyUser
 //class Cache private constructor() {
 //
 ////    companion object {
-////        fun setImageProfile(user: MyUser) {
-////            mCache[user.userId] = user.userProfileUri
+////        fun setImageProfile(currentUser: MyUser) {
+////            mCache[currentUser.userId] = currentUser.userProfileUri
 ////        }
 ////
 ////        fun getImageProfile(userid: String): Uri? {
