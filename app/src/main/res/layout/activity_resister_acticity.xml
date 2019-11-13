@@ -57,18 +57,18 @@
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:alpha="0"
-        app:layout_constraintTop_toTopOf="@id/userImage"
         app:layout_constraintBottom_toBottomOf="@id/userImage"
+        app:layout_constraintLeft_toLeftOf="@id/userImage"
         app:layout_constraintRight_toRightOf="@id/userImage"
-        app:layout_constraintLeft_toLeftOf="@id/userImage"/>
+        app:layout_constraintTop_toTopOf="@id/userImage" />
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/userImage"
         android:layout_width="148dp"
-        app:civ_border_color="#000000"
         android:layout_height="128dp"
         android:src="@drawable/defaultuser"
+        app:civ_border_color="#000000"
         app:civ_border_width="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,12 +105,12 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtNome"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nome_txt"
             android:imeOptions="actionNext"
             android:inputType="text"
+            android:maxLength="25"
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,6 +135,7 @@
             android:hint="@string/email_txt"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
+            android:maxLength="50"
             android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,7 +160,9 @@
             android:fontFamily="@font/quicksand"
             android:hint="@string/password_txt"
             android:imeOptions="actionDone"
+            android:maxLength="10"
             android:maxLines="1"
+            android:minEms="6"
             android:textSize="15sp"
 
 
@@ -204,40 +207,45 @@
 
     <TextView
         android:id="@+id/lblUserName"
-        android:alpha="0"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/userImage"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="13dp"
-        android:textSize="19dp"
+        android:layout_marginEnd="15dp"
+        android:alpha="0"
+        android:textAlignment="center"
         android:textColor="#000000"
-        app:layout_constraintLeft_toLeftOf="@id/userImage"
-        app:layout_constraintRight_toRightOf="@id/userImage"/>
+        android:textSize="19dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userImage" />
+
     <TextView
         android:id="@+id/lblUserEmail"
-        android:alpha="0"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="15dp"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/lblUserName"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
+        android:alpha="0"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="@id/lblUserName"
-        app:layout_constraintRight_toRightOf="@id/lblUserName"/>
+        app:layout_constraintRight_toRightOf="@id/lblUserName"
+        app:layout_constraintTop_toBottomOf="@id/lblUserName" />
+
     <TextView
         android:id="@+id/lblStatusLoading"
-        android:alpha="0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="13dp"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/lblUserEmail"
         android:layout_marginTop="60dp"
+        android:alpha="0"
+        android:textColor="#000000"
+        android:textSize="13dp"
         app:layout_constraintLeft_toLeftOf="@id/lblUserEmail"
-        app:layout_constraintRight_toRightOf="@id/lblUserEmail"/>
-
-
-
+        app:layout_constraintRight_toRightOf="@id/lblUserEmail"
+        app:layout_constraintTop_toBottomOf="@id/lblUserEmail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

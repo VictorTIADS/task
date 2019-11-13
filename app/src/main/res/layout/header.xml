@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/ic_launcher_removebg_monte_with_opacity"
     android:orientation="vertical"
     android:padding="20dp">
@@ -10,6 +11,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profileImage"
         android:layout_width="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:layout_height="100dp"
         android:src="@mipmap/ic_launcher" />
 
@@ -19,6 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/profileImage"
+        app:layout_constraintStart_toStartOf="@id/profileImage"
         android:text="Fulano de Tal"
         android:textColor="#000000"
         android:textSize="20sp" />
@@ -28,11 +33,12 @@
         android:id="@+id/lblEmailHeaderMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        app:layout_constraintTop_toBottomOf="@id/lblNameHeaderMenu"
+        app:layout_constraintStart_toStartOf="@id/lblNameHeaderMenu"
         android:layout_marginTop="5dp"
         android:text="FulanoDeTal@Teste.com.br"
         android:textColor="#000000"
         android:textSize="15dp"/>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

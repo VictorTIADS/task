@@ -28,7 +28,6 @@ class LoginViewModel : ViewModel() {
 
     fun initSharedPreferences(context: Context) {
         mSharedPreferences = SecurityPreferences(context)
-        //TODO Configurar nome email e foto no hearder
     }
 
 
@@ -46,9 +45,6 @@ class LoginViewModel : ViewModel() {
         service.signInUser(email,password,{
             currentUser.value = BaseModel(MyUser(it),BaseModel.Companion.STATUS.SUCCESS)
             getDocumentUserOnFireStore(it)
-
-
-
         },{
 
             currentUser.value = BaseModel(null,BaseModel.Companion.STATUS.ERROR)
@@ -76,6 +72,5 @@ class LoginViewModel : ViewModel() {
     }
 
     fun getCurrentUser() = currentUser.value
-//ASDASDASDASDASDASDASDASD@asdASDASDASLJHLKDFGLKSAGDLKHFGASDLKHFGASJLDGFSADGLFGASDHFA.COMDSAJFHADSH.CO
 
 }

@@ -106,7 +106,6 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
     private fun setNameAndEmailInTheHeaderMenu() {
         lblNameHeaderMenu.text = viewModel.getNameCurrentUser()
         lblEmailHeaderMenu.text = viewModel.getEmailCurrentUser()
@@ -116,6 +115,5 @@ class MainActivity : AppCompatActivity() {
         Picasso.get().load(viewModel.getPhotoCurrentUser())
             .placeholder(R.drawable.user_default).centerCrop().resize(500, 500).into(profileImage)
     }
-
 
 }
