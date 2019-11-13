@@ -52,29 +52,42 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <ProgressBar
+        android:id="@+id/loadingPhoto"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="@id/userImage"
+        app:layout_constraintLeft_toLeftOf="@id/userImage"
+        app:layout_constraintRight_toRightOf="@id/userImage"
+        app:layout_constraintTop_toTopOf="@id/userImage" />
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="0dp"
-        android:layout_height="195dp"
-        android:src="@drawable/tasklogo"
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userImage"
+        android:layout_width="148dp"
+        android:layout_height="128dp"
+        android:src="@drawable/defaultuser"
+        app:civ_border_color="#000000"
+        app:civ_border_width="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/lblInfoCad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="32dp"
         android:text="Informações Cadastrais"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toBottomOf="@id/userImage" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/laytxtNome"
@@ -88,16 +101,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/lblInfoCad">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtNome"
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nome_txt"
             android:imeOptions="actionNext"
-            android:inputType="text" />
+            android:inputType="text"
+            android:maxLength="25"
+            android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -120,7 +134,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/email_txt"
             android:imeOptions="actionNext"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:maxLength="50"
+            android:textSize="15sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -141,16 +157,22 @@
             android:id="@+id/txtCadastroPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password_txt"
             android:fontFamily="@font/quicksand"
+            android:hint="@string/password_txt"
             android:imeOptions="actionDone"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:minEms="6"
+            android:textSize="15sp"
+
 
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCadastrar"
 
+    <com.google.android.material.button.MaterialButton
+
+        android:id="@+id/btnCadastrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -158,9 +180,72 @@
         android:elevation="10dp"
         android:padding="15dp"
         android:text="@string/cadastrar_txt"
+
         android:textSize="15sp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/laytxtPassword" />
+
+
+    <ProgressBar
+        android:id="@+id/load"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laytxtPassword" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="72dp" />
+
+    <TextView
+        android:id="@+id/lblUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="15dp"
+        android:alpha="0"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="19dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/userImage" />
+
+    <TextView
+        android:id="@+id/lblUserEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
+        android:alpha="0"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/lblUserName"
+        app:layout_constraintRight_toRightOf="@id/lblUserName"
+        app:layout_constraintTop_toBottomOf="@id/lblUserName" />
+
+    <TextView
+        android:id="@+id/lblStatusLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:alpha="0"
+        android:textColor="#000000"
+        android:textSize="13dp"
+        app:layout_constraintLeft_toLeftOf="@id/lblUserEmail"
+        app:layout_constraintRight_toRightOf="@id/lblUserEmail"
+        app:layout_constraintTop_toBottomOf="@id/lblUserEmail" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

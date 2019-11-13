@@ -5,6 +5,7 @@ class TaskConstants {
         val USER_ID = "userId"
         val USER_NAME = "userName"
         val USER_EMAIL = "userEmail"
+        val USER_PROFILE = "userProfile"
     }
 
     object TASK_FILTER{
@@ -13,5 +14,10 @@ class TaskConstants {
         val TODO = 0
 
     }
+    object REQUEST{
+        val CODE_PICTURE = 0
+    }
+
+
 
 }

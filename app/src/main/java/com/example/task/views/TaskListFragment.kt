@@ -55,11 +55,11 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 
         mRecycleTaskList = rootView.findViewById(R.id.recycleView)
 
-        val userId = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!!.toInt()
-        val taskList = mTaskBusiness.getList(userId,taskFilter = 0)
+//        val userId = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!!.toInt()
+//        val taskList = mTaskBusiness.getList(userId,taskFilter = 0)
 
 
-        mRecycleTaskList.adapter = TaskListAdapter(mContext,taskList)
+//        mRecycleTaskList.adapter = TaskListAdapter(mContext,taskList)
 
 
         mRecycleTaskList.adapter = TaskListAdapter(mContext, mutableListOf())
@@ -77,12 +77,12 @@ class TaskListFragment : Fragment(), View.OnClickListener {
     }
 
     fun loadTask(){
-        val userId = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!!.toInt()
-        val taskList = mTaskBusiness.getList(userId, mTaskFilter)
+//        val userId = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!!.toInt()
+//        val taskList = mTaskBusiness.getList(userId, mTaskFilter)
 
-
-        mRecycleTaskList.adapter = TaskListAdapter(mContext,taskList)
-        (mRecycleTaskList.adapter as TaskListAdapter).notifyDataSetChanged()
+//
+//        mRecycleTaskList.adapter = TaskListAdapter(mContext,taskList)
+//        (mRecycleTaskList.adapter as TaskListAdapter).notifyDataSetChanged()
     }
 
     companion object {

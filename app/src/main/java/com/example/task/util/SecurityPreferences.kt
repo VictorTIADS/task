@@ -2,6 +2,7 @@ package com.example.task.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 
 class SecurityPreferences(context: Context) {
 
@@ -18,4 +19,8 @@ class SecurityPreferences(context: Context) {
     fun clear(){
         mSharedPreferences.edit().clear().apply()
     }
+
+
+
+
 }

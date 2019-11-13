@@ -3,7 +3,7 @@ package com.example.task.constants
 class DataBaseConstants {
 
     object  USER{
-        val TABLE_NAME = "user"
+        val TABLE_NAME = "currentUser"
         object COLUMNS{
             val ID = "id"
             val NAME = "name"

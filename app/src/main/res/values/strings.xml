@@ -15,7 +15,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-    <string name="nome_txt">Nome</string>
+    <string name="nome_txt">Nome e Sobrenome</string>
     <string name="email_txt">Email</string>
     <string name="password_txt">Password</string>
     <string name="cadastrar_txt">Cadastrar</string>

@@ -3,32 +3,102 @@ package com.example.task.views
 import android.content.Intent
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.task.R
-import com.example.task.business.UserBusiness
-import com.example.task.constants.TaskConstants
-import com.example.task.util.SecurityPreferences
+import com.example.task.model.BaseModel
+import com.example.task.model.StateLog
+import com.example.task.viewmodel.LoginViewModel
+import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.design.longSnackbar
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var mUserBusiness: UserBusiness
-    private lateinit var mSecurityPreferences: SecurityPreferences
+    lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mUserBusiness = UserBusiness(this)
-        mSecurityPreferences = SecurityPreferences(this)
-        isLogedIn()
         setContentView(R.layout.activity_login)
-        //txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-        txtLoginPassword.transformationMethod = PasswordTransformationMethod()
-
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        viewModel.initSharedPreferences(this)
+        FirebaseApp.initializeApp(this)
+        configureTextInputPassword()
+        setObservable()
+        viewModel.isLogedIn()
         btnLogin.setOnClickListener {
             handleLogin()
         }
+
+
+    }
+
+    private fun setObservable() {
+        viewModel.safeState.observe(this, Observer {
+            when (it.status) {
+                StateLog.Companion.STATE.LOGDED -> {
+                    Log.i("aspk", "USUÁRIO LOGADO")
+                    callMainactivity()
+
+
+                }
+                StateLog.Companion.STATE.NOTLOGED -> {
+                    Log.i("aspk", "USUÁRIO NÃO LOGADO")
+                }
+            }
+        })
+        viewModel.currentUser.observe(this, Observer {
+            when (it.status) {
+                BaseModel.Companion.STATUS.LOADING -> {
+                    controlVisible(BaseModel.Companion.STATUS.LOADING)
+                }
+                BaseModel.Companion.STATUS.SUCCESS -> {
+                    controlVisible(BaseModel.Companion.STATUS.LOADING)
+                    callMainactivity()
+                }
+                BaseModel.Companion.STATUS.ERROR -> {
+                    controlVisible(BaseModel.Companion.STATUS.ERROR)
+
+                }
+            }
+        })
+    }
+
+    private fun controlVisible(status: BaseModel.Companion.STATUS) {
+        when (status) {
+            BaseModel.Companion.STATUS.LOADING -> {
+                btnLogin.text = null
+                btnLogin.isEnabled = false
+                loadingSignIn.visibility = View.VISIBLE
+            }
+            BaseModel.Companion.STATUS.SUCCESS -> {
+                btnLogin.text = "LOGIN"
+                btnLogin.isEnabled = true
+                loadingSignIn.visibility = View.GONE
+            }
+            BaseModel.Companion.STATUS.ERROR -> {
+                btnLogin.text = "LOGIN"
+                btnLogin.isEnabled = true
+                loadingSignIn.visibility = View.GONE
+            }
+
+
+        }
+
+
+    }
+
+    private fun callMainactivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+
+    private fun configureTextInputPassword() {
+        //txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+        txtLoginPassword.transformationMethod = PasswordTransformationMethod()
     }
 
 
@@ -38,25 +108,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
-    private fun handleLogin(){
+    private fun handleLogin() {
         val email = txtLoginEmail.text.toString()
-        val senha = txtLoginPassword.text.toString()
-
-        if(mUserBusiness.login(email,senha)){
-            val intentMain = Intent(this, MainActivity::class.java)
-            startActivity(intentMain)
-            finish()
-        }else{
-            btnLogin.longSnackbar("Email ou Senha Inválidos")
-        }
-
+        val password = txtLoginPassword.text.toString()
+        viewModel.signIn(email, password)
     }
 
-    private fun isLogedIn(){
-        if(mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!=""){
-            startActivity(Intent(this,MainActivity::class.java))
-            finish()
-        }
-    }
+
 }
