@@ -5,25 +5,21 @@
     android:id="@+id/drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:openDrawer="start"
-
     android:orientation="vertical"
-    tools:context=".views.MainActivity">
+    tools:context=".views.MainActivity"
+    tools:openDrawer="start">
 
-    <include layout="@layout/app_bar_main"/>
+    <include layout="@layout/app_bar_main" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/NavigationViewMain"
         android:layout_width="wrap_content"
-        app:headerLayout="@layout/header"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#ffffff"
-        app:menu="@menu/drawermenu"
-        app:itemTextColor="#000000"/>
-
-
-
+        app:headerLayout="@layout/header"
+        app:itemTextColor="#000000"
+        app:menu="@menu/drawermenu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

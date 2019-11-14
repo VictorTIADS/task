@@ -71,14 +71,16 @@ class RegisterRepository{
             }
             .addOnFailureListener {
                 error(it.message)
+
+
             }
 
 
     }
 
-    fun documentoUser(fireUser:FirebaseUser?,success: (doc:DocumentSnapshot) -> Unit, error: (String?) -> Unit){
+    fun documentoUser(userId:String,success: (doc:DocumentSnapshot) -> Unit, error: (String?) -> Unit){
         fire.collection("users")
-            .document(fireUser!!.uid)
+            .document(userId!!)
             .get()
             .addOnSuccessListener {
                 success(it)
@@ -89,7 +91,6 @@ class RegisterRepository{
 
     }
 
-    fun getCurrentUser() = auth.currentUser
 
 
 }

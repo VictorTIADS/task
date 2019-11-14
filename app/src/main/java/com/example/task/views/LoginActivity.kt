@@ -14,6 +14,7 @@ import com.example.task.model.StateLog
 import com.example.task.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_resister_acticity.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -70,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
         when (status) {
             BaseModel.Companion.STATUS.LOADING -> {
                 btnLogin.text = null
+                lblCadastrar.isEnabled = false
                 btnLogin.isEnabled = false
                 loadingSignIn.visibility = View.VISIBLE
             }
@@ -81,6 +83,7 @@ class LoginActivity : AppCompatActivity() {
             BaseModel.Companion.STATUS.ERROR -> {
                 btnLogin.text = "LOGIN"
                 btnLogin.isEnabled = true
+                lblCadastrar.isEnabled = true
                 loadingSignIn.visibility = View.GONE
             }
 
