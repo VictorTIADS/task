@@ -28,7 +28,8 @@ class TaskListFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.floatAddTask -> {
-                startActivity(Intent(mContext, TaskFormActivity::class.java))
+
+
 
             }
         }
@@ -49,19 +50,7 @@ class TaskListFragment : Fragment(), View.OnClickListener {
         val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
         rootView.findViewById<FloatingActionButton>(R.id.floatAddTask).setOnClickListener(this)
         mContext = rootView.context
-
-        mTaskBusiness = TaskBusiness(mContext)
-        mSecurityPreferences = SecurityPreferences(mContext)
-
         mRecycleTaskList = rootView.findViewById(R.id.recycleView)
-
-//        val userId = mSecurityPreferences.getStoreString(TaskConstants.KEY.USER_ID)!!.toInt()
-//        val taskList = mTaskBusiness.getList(userId,taskFilter = 0)
-
-
-//        mRecycleTaskList.adapter = TaskListAdapter(mContext,taskList)
-
-
         mRecycleTaskList.adapter = TaskListAdapter(mContext, mutableListOf())
         mRecycleTaskList.layoutManager = LinearLayoutManager(mContext)
 
