@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.fragment_task_list.*
 import kotlinx.android.synthetic.main.header.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
@@ -74,9 +75,9 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.MenuItemTarefasFeitas -> {
-                    TaskListFragment.newInstance(TaskConstants.TASK_FILTER.COMPLETE)
-                    toast("as")
-
+//                    TaskListFragment.newInstance(TaskConstants.TASK_FILTER.COMPLETE)
+//                    toast("as")
+                    supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, TaskFormFragment.newInstance()).commit()
                     true
                 }
                 R.id.MenuItemTarefasPendentes -> {
@@ -121,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, fragment).commit()
     }
 
-    fun startSomeFragment(instance: TaskListFragment) {
+    fun startSomeFragment(instance: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, instance).commit()
     }
 
@@ -130,17 +131,21 @@ class MainActivity : AppCompatActivity() {
 
 
         setNameAndEmailInTheHeaderMenu()
-//        setImageProfileWithPicasso()
+        setImageProfileWithPicasso()
 
 
 
 
         if (mToggle.onOptionsItemSelected(item)) {
             mToggle.syncState()
+
             return true
         }
+
         return super.onOptionsItemSelected(item)
     }
+
+
 
 
     private fun setNameAndEmailInTheHeaderMenu() {
