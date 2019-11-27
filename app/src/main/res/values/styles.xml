@@ -36,7 +36,6 @@
         <item name="colorAccent">@color/CadastroColorAccent</item>
         <item name="android:fontFamily">@font/quicksand</item>
         <item name="android:windowFullscreen">true</item>
-
     </style>
 
 
@@ -48,6 +47,12 @@
         <item name="android:fontFamily">@font/quicksand</item>
         <item name="android:windowFullscreen">true</item>
 
+    </style>
+
+    <style name="my_toolbar">
+        <item name="colorPrimary">@color/LoginColorPrimary</item>
+        <item name="colorPrimaryDark">@color/LoginColorPrimaryDark</item>
+        <item name="colorAccent">@color/LoginColorAccent</item>
     </style>
 
     <style name="Tela_Form_Theme" parent="Theme.MaterialComponents.Light.NoActionBar">

@@ -156,6 +156,54 @@ fun View.startAnimnLoadingStatusHiding(ended: () -> Unit){
 fun View.animationMasterSlow(ended: () -> Unit){
     this.animate()
         .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(200)
+        .alpha(0f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+
+fun View.radioFadeIn(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(400)
+        .alpha(1f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+
+fun View.radioFadeOut(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
         .setDuration(500)
         .alpha(0f)
         .setListener(object : Animator.AnimatorListener {
@@ -176,6 +224,7 @@ fun View.animationMasterSlow(ended: () -> Unit){
             }
         })
 }
+
 
 fun View.visibleGone() {
     this.visibility = View.GONE

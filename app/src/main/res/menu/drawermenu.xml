@@ -4,17 +4,10 @@
     <item android:title="Tarefas">
 
         <menu>
-
             <item
-                android:id="@+id/MenuItemTarefasPendentes"
-                android:icon="@drawable/ic_error_black_24dp"
-                android:title="Tarefas Pendentes" />
-
-            <item
-                android:id="@+id/MenuItemTarefasFeitas"
-                android:icon="@drawable/ic_check_circle_black_24dp"
-                android:title="Tarefas Feitas" />
-
+                android:id="@+id/MenuItemInicio"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Início" />
         </menu>
 
     </item>

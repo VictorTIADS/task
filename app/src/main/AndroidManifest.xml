@@ -13,9 +13,13 @@
         android:theme="@style/AppTheme">
 
 
-
-
-        <activity android:name=".views.TaskFormActivity" android:theme="@style/Tela_Form_Theme">
+        <activity
+            android:name=".views.TaskFormActivity"
+            android:parentActivityName=".views.MainActivity"
+            android:theme="@style/Tela_Form_Theme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".views.MainActivity" />
 
 
         </activity>
@@ -31,7 +35,6 @@
             </intent-filter>
 
         </activity>
-
 
 
         <activity

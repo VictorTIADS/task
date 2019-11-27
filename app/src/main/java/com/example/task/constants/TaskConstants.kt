@@ -15,6 +15,9 @@ class TaskConstants {
         val TODO = 0
 
     }
+    object STATE{
+        val ERROR = "STATE_ERROR"
+    }
     object REQUEST{
         val CODE_PICTURE = 0
     }

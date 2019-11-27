@@ -11,10 +11,12 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.task.R
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
+import com.example.task.model.ValidationCredentialState
+import com.example.task.util.setMessageOfError
 import com.example.task.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_resister_acticity.*
+import org.jetbrains.anko.design.longSnackbar
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,15 +39,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setObservable() {
-        viewModel.safeState.observe(this, Observer {
+        viewModel.isUserLoged.observe(this, Observer {
             when (it.status) {
-                StateLog.Companion.STATE.LOGDED -> {
+                StateLog.Companion.STATE.TRUE -> {
                     Log.i("aspk", "USUÁRIO LOGADO")
                     callMainactivity()
 
 
                 }
-                StateLog.Companion.STATE.NOTLOGED -> {
+                StateLog.Companion.STATE.FALSE -> {
                     Log.i("aspk", "USUÁRIO NÃO LOGADO")
                 }
             }
@@ -61,8 +63,30 @@ class LoginActivity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     controlVisible(BaseModel.Companion.STATUS.ERROR)
+                    btnLogin.longSnackbar(it.message.toString())
 
                 }
+            }
+        })
+        viewModel.stateCredentials.observe(this, Observer {
+            when (it.error){
+
+                ValidationCredentialState.Companion.ERROR.FALSE ->{
+                    viewModel.signIn(it.email,it.password)
+                }
+                ValidationCredentialState.Companion.ERROR.ALL ->{
+                    txtLoginPassword.setMessageOfError("Campo Obrigatório")
+                    txtLoginEmail.setMessageOfError("Campo Obrigatório")
+                }
+                ValidationCredentialState.Companion.ERROR.EMAIL ->{
+                    txtLoginEmail.setMessageOfError("Campo Obrigatório")
+
+                }
+                ValidationCredentialState.Companion.ERROR.SENHA ->{
+                    txtLoginPassword.setMessageOfError("Campo Obrigatório")
+                }
+
+
             }
         })
     }
@@ -114,7 +138,32 @@ class LoginActivity : AppCompatActivity() {
     private fun handleLogin() {
         val email = txtLoginEmail.text.toString()
         val password = txtLoginPassword.text.toString()
-        viewModel.signIn(email, password)
+        viewModel.validateCredential(email,password)
+//        viewModel.signIn(email, password)
+//        when {
+//            CredencialValidator.validateEmail(email) && CredencialValidator.validatePassword(password) -> {
+//                toast("All Right")
+//            }
+//            !CredencialValidator.validateEmail(email) && !CredencialValidator.validatePassword(
+//                password
+//            ) -> {
+//                txtLoginEmail.error = "Campo Obrigatório"
+//                txtLoginPassword.error = "Campo Obrigatório"
+//
+//            }
+//            !CredencialValidator.validateEmail(email) -> {
+//                txtLoginEmail.error = "Campo Obrigatório"
+//
+//            }
+//            !CredencialValidator.validatePassword(password) -> {
+//                txtLoginPassword.error = "Campo Obrigatório"
+//
+//            }
+//
+//
+//        }
+
+
     }
 
 

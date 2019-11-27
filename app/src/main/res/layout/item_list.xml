@@ -1,106 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="29dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/label_variant_outline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/my_item_view"
+    android:layout_marginTop="7.5dp"
+    android:layout_marginBottom="7.5dp"
+    android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/lblDataList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:gravity="center_vertical"
-        android:text="16/10/2019"
-        android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toTopOf="@+id/textView10" />
+        android:id="@+id/item_view_priority"
+        android:layout_width="6dp"
+        android:layout_height="match_parent"
+        android:background="#000000" />
 
-    <TextView
-        android:id="@+id/lblDescricaoList"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
 
-        android:text="Descrição da tarefa"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-
-        android:text="Prioridade:"
-        app:layout_constraintStart_toStartOf="@+id/lblDescricaoList"
-        app:layout_constraintTop_toBottomOf="@+id/lblDescricaoList" />
-
-    <TextView
-        android:id="@+id/lblPrioridadeList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-
-        android:text="Alta"
-        app:layout_constraintBottom_toBottomOf="@+id/textView12"
-        app:layout_constraintStart_toEndOf="@+id/textView12"
-        app:layout_constraintTop_toTopOf="@+id/textView12" />
-
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Status:"
-
-        app:layout_constraintStart_toEndOf="@+id/lblPrioridadeList"
-        app:layout_constraintTop_toTopOf="@+id/lblPrioridadeList" />
-
-    <TextView
-        android:id="@+id/lblStatusList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
-        android:text="Completa"
-        app:layout_constraintStart_toEndOf="@+id/textView16"
-        app:layout_constraintTop_toTopOf="@+id/textView16" />
-
-    <TextView
-        android:id="@+id/divider"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="#aaa"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-    <TextView
-        android:id="@+id/textView10"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="Data:"
+        android:layout_margin="8dp">
 
-        app:layout_constraintStart_toEndOf="@+id/lblStatusList"
-        app:layout_constraintTop_toTopOf="@+id/lblStatusList" />
+        <TextView
+            android:id="@+id/itemview_lbl_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Title"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/itemview_lbl_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:text="Here goes a task description"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="@+id/itemview_lbl_title"
+            app:layout_constraintStart_toStartOf="@+id/itemview_lbl_title"
+            app:layout_constraintTop_toBottomOf="@id/itemview_lbl_title" />
+
+        <TextView
+            android:id="@+id/itemview_lbl_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="19/11/2019"
+            android:textSize="15dp"
+            app:layout_constraintEnd_toEndOf="@id/itemview_lbl_title"
+            app:layout_constraintTop_toBottomOf="@id/itemview_lbl_description"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

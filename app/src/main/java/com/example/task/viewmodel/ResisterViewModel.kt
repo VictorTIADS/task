@@ -20,33 +20,33 @@ class ResisterViewModel : ViewModel() {
 
 
     fun signUpUser(userEmail: String, userPwd: String,userName: String) {
-        mUser.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING)
+        mUser.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING,null)
         service.signUpUser(userEmail, userPwd, {
-            mUser.value = BaseModel(MyUser(it), BaseModel.Companion.STATUS.SUCCESS)
+            mUser.value = BaseModel(MyUser(it), BaseModel.Companion.STATUS.SUCCESS,null)
             mUser?.value?.data?.userName = userName
         }, {
-            mUser.value = BaseModel(null, BaseModel.Companion.STATUS.SUCCESS)
+            mUser.value = BaseModel(null, BaseModel.Companion.STATUS.SUCCESS,it)
         })
     }
 
     fun upLoadPhoto(uriImage:Uri) {
-        savePhoto.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING)
+        savePhoto.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING,null)
         service.upLoadPhotoOnFirebase(uriImage,{
             mUser.value?.data?.userProfile = it.toString()
-            savePhoto.value = BaseModel(it, BaseModel.Companion.STATUS.SUCCESS)
+            savePhoto.value = BaseModel(it, BaseModel.Companion.STATUS.SUCCESS,null)
         }, {
-
+            savePhoto.value = BaseModel(null, BaseModel.Companion.STATUS.SUCCESS,it)
         })
     }
 
     fun resisterMyUserOnFireStore() {
-        finalUser.value = BaseModel(null,BaseModel.Companion.STATUS.LOADING)
+        finalUser.value = BaseModel(null,BaseModel.Companion.STATUS.LOADING,null)
         service.createClassOnFireStore(mUser.value?.data!!,{
-            finalUser.value = BaseModel(mUser?.value?.data,BaseModel.Companion.STATUS.SUCCESS)
+            finalUser.value = BaseModel(mUser?.value?.data,BaseModel.Companion.STATUS.SUCCESS,null)
             storeStringsOnSharedPreferences(finalUser.value!!.data!!)
 
         },{
-
+            finalUser.value = BaseModel(null,BaseModel.Companion.STATUS.SUCCESS,it)
         })
     }
 
