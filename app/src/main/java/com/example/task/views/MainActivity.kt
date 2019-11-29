@@ -3,11 +3,8 @@ package com.example.task.views
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
@@ -15,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
 import com.example.task.business.PriorityBusiness
 import com.example.task.constants.PriorityCacheConstants
@@ -26,10 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.fragment_task_list.*
 import kotlinx.android.synthetic.main.header.*
-import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.header_state_error.*
 import kotlinx.android.synthetic.main.hint_header.*
 import org.jetbrains.anko.*
@@ -62,16 +58,20 @@ class MainActivity : AppCompatActivity() {
         mHeaderInfo = NavigationViewMain.getHeaderView(0)
 //        lbl_content_main_user_name.text = viewModel.getNameCurrentUser()
 
-
         loadPriorityCache()
         startDefaultFragment()
         setObservable()
 
-
-
-
         floatAddTask.setOnClickListener {
-            callTaskFormActivity()
+            YoYo.with(Techniques.RubberBand)
+                .onEnd {
+                    callTaskFormActivity()
+                }
+                .duration(500)
+                .playOn(it)
+        }
+        mHeaderInfo.setOnClickListener {
+            startSomeFragment(UserInfoFragment.newInstance())
         }
 
         NavigationViewMain.setNavigationItemSelectedListener {

@@ -2,11 +2,14 @@ package com.example.task.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.YuvImage
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
 import com.example.task.entities.TaskEntity
 import kotlinx.android.synthetic.main.item_list.view.*
@@ -15,6 +18,8 @@ import org.jetbrains.anko.backgroundColor
 class TaskListAdapter( val context: Context,val list: MutableList<TaskEntity>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+
         val task = list[position]
 
         val data = holder.itemView.itemview_lbl_date
@@ -41,15 +46,17 @@ class TaskListAdapter( val context: Context,val list: MutableList<TaskEntity>) :
             }
         }
 
+        holder.itemView.setOnClickListener {
+            YoYo.with(Techniques.Pulse)
+                .duration(350)
+                .playOn(it)
+        }
 
-//        prioridade.text = PriorityCacheConstants.getPriorityDescription(task.priorityId)
-////        status.text = if (task.complete) "Complete" else "Pendente"
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_list,parent,false)
-
         return ViewlHolder(view)
     }
 

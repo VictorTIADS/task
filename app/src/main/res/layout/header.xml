@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ic_launcher_removebg_monte_with_opacity"
     android:orientation="vertical"
-    android:padding="20dp">
+    >
 
         <include layout="@layout/header_state_error" android:visibility="gone"/>
 
@@ -29,6 +29,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@mipmap/ic_launcher"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             app:civ_border_color="#ffffff"
             app:civ_border_width="3dp"
             android:visibility="gone"
@@ -58,6 +60,8 @@
             android:textColor="#000000"
             android:textSize="15dp"
             android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/lblNameHeaderMenu"
             app:layout_constraintTop_toBottomOf="@id/lblNameHeaderMenu"
             tools:text="Fulanobeltrano@hotmail.com" />

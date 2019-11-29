@@ -8,6 +8,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
@@ -17,6 +19,7 @@ import com.example.task.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 class LoginActivity : AppCompatActivity() {
 
@@ -72,23 +75,31 @@ class LoginActivity : AppCompatActivity() {
             when (it.error){
 
                 ValidationCredentialState.Companion.ERROR.FALSE ->{
-                    viewModel.signIn(it.email,it.password)
+                    it.email?.let { it1 -> it.password?.let { it2 -> viewModel.signIn(it1, it2) } }
                 }
                 ValidationCredentialState.Companion.ERROR.ALL ->{
-                    txtLoginPassword.setMessageOfError("Campo Obrigatório")
-                    txtLoginEmail.setMessageOfError("Campo Obrigatório")
+                    animateView(textInputLayoutLoginEmail)
+                    animateView(textInputLayoutLoginPassword)
+                    btnLogin.snackbar("Email e Senha Obrigatórios")
                 }
                 ValidationCredentialState.Companion.ERROR.EMAIL ->{
-                    txtLoginEmail.setMessageOfError("Campo Obrigatório")
+                    animateView(textInputLayoutLoginEmail)
+                    btnLogin.snackbar("Email Obrigatório")
 
                 }
                 ValidationCredentialState.Companion.ERROR.SENHA ->{
-                    txtLoginPassword.setMessageOfError("Campo Obrigatório")
+                    animateView(textInputLayoutLoginPassword)
+                    btnLogin.snackbar("Senha Obrigatória")
                 }
 
 
             }
         })
+    }
+    private fun animateView(view: View){
+        YoYo.with(Techniques.Shake)
+            .duration(500)
+            .playOn(view)
     }
 
     private fun controlVisible(status: BaseModel.Companion.STATUS) {

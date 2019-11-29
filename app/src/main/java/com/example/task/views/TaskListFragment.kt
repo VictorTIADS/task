@@ -80,7 +80,10 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 
 
 
-//        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT){
+
+
+
+//        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
 //            override fun onSwiped(taskViewHolder: RecyclerView.ViewHolder, direction: Int) {
 //                mAdapter.removeItemAtPosition(taskViewHolder)
 //
@@ -93,11 +96,11 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 //            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
 //                val itemview = viewHolder.itemView
 //                swipeBackgraund = when(taskList[viewHolder.adapterPosition].priorityId){
-//                    1 -> {ColorDrawable(Color.RED)}
-//                    2 -> {ColorDrawable(Color.YELLOW)}
-//                    3 -> {ColorDrawable(Color.GREEN)}
-//                    4 -> {ColorDrawable(Color.BLUE)}
-//                    else -> ColorDrawable(Color.RED)
+//                    1 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorRed))}
+//                    2 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorYellow))}
+//                    3 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorGreen))}
+//                    4 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorBlue))}
+//                    else -> ColorDrawable(ContextCompat.getColor(mContext,R.color.colorRed))
 //                }
 //
 //                if (dX>0){
@@ -105,7 +108,7 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 //
 //
 //                }else{
-//
+//                    swipeBackgraund.setBounds(itemview.left,itemview.top,dX.toInt(),itemview.bottom)
 //                }
 //
 //                swipeBackgraund.draw(c)
@@ -122,7 +125,7 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 //            }
 //
 //        }
-
+//
 //        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
 //        itemTouchHelper.attachToRecyclerView(mRecycleTaskList)
 

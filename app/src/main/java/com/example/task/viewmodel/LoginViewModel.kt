@@ -45,7 +45,9 @@ class LoginViewModel : ViewModel() {
                     ValidationCredentialState.Companion.STATE.SUCCESS,
                     ValidationCredentialState.Companion.ERROR.FALSE,
                     email,
-                    password
+                    password,
+                    null,
+                    null
                 )
             }
             !validateEmail(email) && !validatePassword(password) -> {
@@ -53,7 +55,9 @@ class LoginViewModel : ViewModel() {
                     ValidationCredentialState.Companion.STATE.ERROR,
                     ValidationCredentialState.Companion.ERROR.ALL,
                     email,
-                    password
+                    password,
+                    null,
+                    null
                 )
 
             }
@@ -62,7 +66,10 @@ class LoginViewModel : ViewModel() {
                     ValidationCredentialState.Companion.STATE.ERROR,
                     ValidationCredentialState.Companion.ERROR.EMAIL,
                     email,
-                    password
+                    password,
+                    null,
+                    null
+
                 )
 
             }
@@ -71,7 +78,9 @@ class LoginViewModel : ViewModel() {
                     ValidationCredentialState.Companion.STATE.ERROR,
                     ValidationCredentialState.Companion.ERROR.SENHA,
                     email,
-                    password
+                    password,
+                    null,
+                    null
                 )
 
             }

@@ -1,12 +1,14 @@
 package com.example.task.model
 
-data class ValidationCredentialState(val status: STATE,val error:ERROR?,var email:String,val password:String){
+import android.net.Uri
+
+data class ValidationCredentialState(val status: STATE,val error:ERROR?,val email:String?,val password:String?,val name:String?,val photo: Uri?){
     companion object {
         enum class STATE {
             SUCCESS,ERROR
         }
         enum class ERROR{
-            FALSE,EMAIL,SENHA,ALL
+            FALSE,EMAIL,SENHA,NAME,PHOTO,ALL
         }
     }
 }
