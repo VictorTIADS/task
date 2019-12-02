@@ -24,17 +24,22 @@ import com.example.task.adapter.TaskListAdapter
 import com.example.task.constants.TaskConstants
 import com.example.task.entities.TaskEntity
 import com.example.task.model.BaseModel
+import com.example.task.model.StateLog
 import com.example.task.util.SecurityPreferences
 import com.example.task.viewmodel.TaskListFragmentViewModel
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
+import kotlinx.android.synthetic.main.activity_task_form.*
 import kotlinx.android.synthetic.main.item_list.*
+import org.jetbrains.anko.design.longSnackbar
 
 lateinit var mContext: Context
 lateinit var viewModel: TaskListFragmentViewModel
 private lateinit var mRecycleTaskList: RecyclerView
 private lateinit var mSecurityPreferences: SecurityPreferences
 private lateinit var mAdapter: TaskListAdapter
+private lateinit var swipeIcon:Drawable
 private var swipeBackgraund = ColorDrawable(Color.TRANSPARENT)
+
 private var mTaskFilter = 0
 private lateinit var loader: View
 
@@ -52,6 +57,7 @@ class TaskListFragment : Fragment(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(TaskListFragmentViewModel::class.java)
         setObservable()
+
         if (arguments != null) {
             mTaskFilter = arguments!!.getInt(TaskConstants.TASK_FILTER.KEY)
         }
@@ -77,57 +83,36 @@ class TaskListFragment : Fragment(), View.OnClickListener {
         mRecycleTaskList.adapter = mAdapter
         mRecycleTaskList.layoutManager = LinearLayoutManager(mContext)
         mAdapter.notifyDataSetChanged()
+        swipeIcon = ContextCompat.getDrawable(mContext,R.drawable.ic_delete_black_24dp)!!
 
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
+            override fun onSwiped(taskViewHolder: RecyclerView.ViewHolder, direction: Int) {
+                viewModel.removeItemFromTheList(taskList[taskViewHolder.adapterPosition].taskId,taskList[taskViewHolder.adapterPosition].userId)
+            }
 
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
 
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+                val itemview = viewHolder.itemView
+                val iconMargin = (itemview.height - swipeIcon.intrinsicHeight)/2
+                if (dX>0){
+                    swipeBackgraund.setBounds(itemview.left,itemview.top,dX.toInt(),itemview.bottom)
+                    swipeIcon.setBounds(itemview.left+iconMargin,itemview.top+iconMargin,itemview.left + iconMargin + swipeIcon.intrinsicWidth,itemview.bottom - iconMargin)
+                }
+                swipeBackgraund.draw(c)
+                swipeIcon.draw(c)
+                c.save()
+                c.restore()
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
 
+        }
 
-//        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
-//            override fun onSwiped(taskViewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                mAdapter.removeItemAtPosition(taskViewHolder)
-//
-//            }
-//
-//            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-//                return false
-//            }
-//
-//            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-//                val itemview = viewHolder.itemView
-//                swipeBackgraund = when(taskList[viewHolder.adapterPosition].priorityId){
-//                    1 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorRed))}
-//                    2 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorYellow))}
-//                    3 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorGreen))}
-//                    4 -> {ColorDrawable(ContextCompat.getColor(mContext,R.color.colorBlue))}
-//                    else -> ColorDrawable(ContextCompat.getColor(mContext,R.color.colorRed))
-//                }
-//
-//                if (dX>0){
-//                    swipeBackgraund.setBounds(itemview.left,itemview.top,dX.toInt(),itemview.bottom)
-//
-//
-//                }else{
-//                    swipeBackgraund.setBounds(itemview.left,itemview.top,dX.toInt(),itemview.bottom)
-//                }
-//
-//                swipeBackgraund.draw(c)
-//
-//                c.save()
-//
-//
-//                if (dX > 0){
-//                    c.clipRect(itemview.left,itemview.top,dX.toInt(),itemview.bottom)
-//                }
-//
-//                c.restore()
-//                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-//            }
-//
-//        }
-//
-//        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-//        itemTouchHelper.attachToRecyclerView(mRecycleTaskList)
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(mRecycleTaskList)
 
     }
 
@@ -161,6 +146,22 @@ class TaskListFragment : Fragment(), View.OnClickListener {
                 }
             }
         })
+        viewModel.stateTask.observe(this, Observer {
+            when (it.status){
+                 StateLog.Companion.STATE.LOADING-> {
+                    Log.i("aspk", "LOADING TASK DELETE")
+                }
+                StateLog.Companion.STATE.SUCCESS-> {
+
+//                    viewModel.getListOfTasks()
+                    fragmentManager?.beginTransaction()?.replace(R.id.frameAppBarMain,newInstance(0))?.commit()
+                    Log.i("aspk", "SUCCESS TASK DELETE")
+                }
+                StateLog.Companion.STATE.ERROR-> {
+                    Log.i("aspk", "ERROR TASK DELETE")
+                }
+            }
+        })
     }
 
     private fun controlViewLoader(state: BaseModel.Companion.STATUS) {
@@ -185,8 +186,9 @@ class TaskListFragment : Fragment(), View.OnClickListener {
     companion object {
 
         @JvmStatic
-        fun newInstance(taskFilter: Int = 0): TaskListFragment {
+        fun newInstance(taskFilter: Int): TaskListFragment {
             val args: Bundle = Bundle()
+            args.putInt(TaskConstants.TASK_FILTER.KEY,taskFilter)
             val fragment = TaskListFragment()
             fragment.arguments = args
             return fragment

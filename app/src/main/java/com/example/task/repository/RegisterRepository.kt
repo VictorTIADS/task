@@ -13,6 +13,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.core.UserData
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import java.util.*
@@ -43,6 +44,18 @@ class RegisterRepository {
     }
     fun isUserLogedOnFirebase():Boolean{
         return auth.currentUser!=null
+    }
+    fun removeTaskFromFirestore(taskid:String,userId:String,success: () -> Unit, error: (message: String?) -> Unit){
+        fire.collection("users")
+            .document(userId)
+            .collection("Tasks")
+            .document(taskid).delete()
+            .addOnSuccessListener {
+                success()
+            }
+            .addOnFailureListener {
+                error(it.message)
+            }
     }
 
 
@@ -133,10 +146,21 @@ class RegisterRepository {
 
         fire.collection("users")
             .document("${task.userId}")
-            .collection("Tasks").add(task)
+            .collection("Tasks")
+            .add(task)
             .addOnSuccessListener {
-                success()
 
+
+                fire.collection("users")
+                    .document("${task.userId}")
+                    .collection("Tasks")
+                    .document(it.id).update("taskId",it.id)
+                    .addOnSuccessListener {
+                        success()
+                    }
+                    .addOnFailureListener { exception ->
+                        error(exception.message)
+                    }
             }
             .addOnFailureListener {
                 error(it.message)
@@ -147,12 +171,14 @@ class RegisterRepository {
 
     }
 
+
     fun getUserTasksOnFirebase(success: (list: MutableList<TaskEntity>) -> Unit, error: (message: String?) -> Unit) {
         fire.collection("users")
             .document("${auth.uid}")
             .collection("Tasks")
             .get()
             .addOnSuccessListener {
+
                 success(it.toObjects(TaskEntity::class.java))
             }
             .addOnFailureListener {

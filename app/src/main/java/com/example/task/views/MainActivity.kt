@@ -2,6 +2,7 @@ package com.example.task.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -9,23 +10,31 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
+import com.example.task.adapter.PageAdapter
 import com.example.task.business.PriorityBusiness
 import com.example.task.constants.PriorityCacheConstants
 import com.example.task.constants.TaskConstants
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.viewmodel.MainViewModel
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.header.*
+import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.header_state_error.*
 import kotlinx.android.synthetic.main.hint_header.*
 import org.jetbrains.anko.*
@@ -38,6 +47,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
     private lateinit var viewModel: MainViewModel
     private lateinit var mHeaderInfo: View
+    lateinit var mViewPager:ViewPager
+    lateinit var mTabLayout:TabLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +68,23 @@ class MainActivity : AppCompatActivity() {
         mToggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mHeaderInfo = NavigationViewMain.getHeaderView(0)
+//        mViewPager = pager
+//        mTabLayout = tablelayout
 //        lbl_content_main_user_name.text = viewModel.getNameCurrentUser()
 
-        loadPriorityCache()
+//        loadPriorityCache()
         startDefaultFragment()
         setObservable()
 
+
+//        setupViewPager(mViewPager)
+//        mTabLayout.setupWithViewPager(mViewPager)
+
+
+
+
         floatAddTask.setOnClickListener {
+            floatAddTask.isClickable = false
             YoYo.with(Techniques.RubberBand)
                 .onEnd {
                     callTaskFormActivity()
@@ -71,11 +93,18 @@ class MainActivity : AppCompatActivity() {
                 .playOn(it)
         }
         mHeaderInfo.setOnClickListener {
-            startSomeFragment(UserInfoFragment.newInstance())
+
+            startSomeFragment(UserInfoFragment.newInstance(viewModel.getNameCurrentUser(),viewModel.getEmailCurrentUser(),viewModel.getPhotoCurrentUser()))
+            floatAddTask.hide()
+            mDrawerLayout.closeDrawers()
         }
 
         NavigationViewMain.setNavigationItemSelectedListener {
             when (it.itemId) {
+                R.id.userImage -> {
+
+                    true
+                }
                 R.id.MenuItemSair -> {
                     val box = alert("Você está prestes a sair.", "Deseja realmente sair?") {
                         yesButton {
@@ -88,6 +117,8 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.MenuItemInicio -> {
                     startDefaultFragment()
+                    floatAddTask.show()
+                    floatAddTask.isClickable = true
                     mDrawerLayout.closeDrawers()
                     true
                 }
@@ -103,7 +134,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+//    private fun setupViewPager(viewPager: ViewPager){
+//        val adapter = PageAdapter(supportFragmentManager)
+//        adapter.addFragment(CalendarFragment.newInstance(),"Inicio")
+//        adapter.addFragment(TaskListFragment.newInstance(TaskConstants.TASK_FILTER.TODO),"Tarefas")
+//        viewPager.adapter = adapter
+//    }
+
     override fun onResume() {
+        floatAddTask.isClickable = true
         startDefaultFragment()
         super.onResume()
     }
@@ -175,6 +214,7 @@ class MainActivity : AppCompatActivity() {
     fun startSomeFragment(instance: Fragment) {
         supportFragmentManager.beginTransaction().replace(R.id.frameAppBarMain, instance)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+        floatAddTask.hide()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -186,18 +226,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setNameAndEmailInTheHeaderMenu() {
-        lblNameHeaderMenu.text = viewModel.getNameCurrentUser()
-        lblEmailHeaderMenu.text = viewModel.getEmailCurrentUser()
+        mHeaderInfo.lblNameHeaderMenu.text = viewModel.getNameCurrentUser()
+        mHeaderInfo.lblEmailHeaderMenu.text = viewModel.getEmailCurrentUser()
     }
 
     private fun setImageProfileWithPicasso() {
         if (viewModel.getPhotoCurrentUser()!!.isEmpty() || viewModel.getPhotoCurrentUser()!!.isBlank()) {
             val box = alert(
-                "Pedimos desculpas, não conseguimos carregar seus dados. Efetue novamente o login.",
-                "Sessão Expirada"
+                "Pedimos desculpas, não conseguimos carregar seus dados.\n\nPara Resolver, efetue novamente o login.",
+                "Ops!, Algo de Errado Aconteceu"
             ) {
                 okButton {
-
                     viewModel.clearSharedPreferences()
                     FirebaseAuth.getInstance().signOut()
                     startActivity(Intent(baseContext, LoginActivity::class.java))
@@ -210,7 +249,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             Picasso.get().load(viewModel.getPhotoCurrentUser())
                 .placeholder(R.drawable.user_default).centerCrop().resize(500, 500)
-                .into(profileHeaderImage)
+                .into(mHeaderInfo.profileHeaderImage)
         }
 
     }

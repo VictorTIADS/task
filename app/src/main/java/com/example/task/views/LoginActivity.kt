@@ -2,6 +2,8 @@ package com.example.task.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
@@ -135,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun configureTextInputPassword() {
-        //txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+        txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
         txtLoginPassword.transformationMethod = PasswordTransformationMethod()
     }
 

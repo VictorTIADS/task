@@ -1,7 +1,5 @@
 package com.example.task.views
 
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -10,7 +8,6 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.daimajia.androidanimations.library.Techniques
@@ -23,8 +20,8 @@ import com.example.task.animation.*
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.model.ValidationCredentialState
-import com.example.task.util.CredencialValidator
 import com.example.task.viewmodel.ResisterViewModel
+import org.jetbrains.anko.design.indefiniteSnackbar
 import org.jetbrains.anko.design.snackbar
 
 
@@ -167,8 +164,6 @@ class ResisterActicity : AppCompatActivity() {
                 }
             }
         })
-
-
     }
 
     private fun animateView(view: View){
@@ -188,7 +183,6 @@ class ResisterActicity : AppCompatActivity() {
         val callMain = Intent(this, MainActivity::class.java)
         startActivity(callMain)
         finish()
-
     }
 
     private fun selectImageFromGalery() {
@@ -201,8 +195,10 @@ class ResisterActicity : AppCompatActivity() {
         Picasso.get().load(uri).centerCrop().resize(500, 500).into(userImage)
     }
 
-    private fun controlEnableComponents(control: StateLog.Companion.STATE) {
 
+
+    private fun controlEnableComponents(control: StateLog.Companion.STATE) {
+        val userPhotoAnimation = YoYo.with(Techniques.Bounce).duration(1500)
         when (control){
             StateLog.Companion.STATE.IMAGEUNSELECTED -> {
                 txtNome.isEnabled = false
@@ -210,11 +206,14 @@ class ResisterActicity : AppCompatActivity() {
                 userImage.isEnabled = true
                 txtCadastroPassword.isEnabled = false
                 btnCadastrar.isEnabled = false
+                btnCadastrar.indefiniteSnackbar("Clique na câmera para selecionar uma foto de perfil.")
                 txtNome.requestFocus()
+                userPhotoAnimation.repeat(5).playOn(userImage)
             }
             StateLog.Companion.STATE.IMAGESELECTED -> {
                 txtNome.isEnabled = true
                 txtEmail.isEnabled = true
+                btnCadastrar.snackbar("Ok.. Agora continue colocando seus dados.")
                 txtCadastroPassword.isEnabled = true
                 btnCadastrar.isEnabled = true
                 txtNome.requestFocus()
@@ -266,13 +265,20 @@ class ResisterActicity : AppCompatActivity() {
     }
 
     private fun animationMaster(){
-        userImage.animationMasterSlow {  }
-        lblUserName.animationMasterSlow {  }
-        lblUserEmail.animationMasterSlow {  }
-        lblStatusLoading.animationMasterSlow {  }
-        loadingPhoto.animationMasterSlow { callMainActivity() }
-
-
+        animationYoyo(userImage){}
+        animationYoyo(lblUserName){}
+        animationYoyo(lblUserEmail){}
+        animationYoyo(lblStatusLoading){}
+        animationYoyo(loadingPhoto){callMainActivity()}
+    }
+    private fun animationYoyo(view:View,cabo:()->Unit){
+        YoYo.with(Techniques.SlideOutLeft)
+            .onEnd {
+                cabo()
+            }
+            .pivotY(-200f)
+            .duration(500)
+            .playOn(view)
     }
 
 

@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.task.entities.TaskEntity
 import com.example.task.model.BaseModel
+import com.example.task.model.StateLog
 import com.example.task.repository.RegisterRepository
 
 class TaskListFragmentViewModel():ViewModel(){
 
     private val service = RegisterRepository()
     val mTaskLists = MutableLiveData<BaseModel<MutableList<TaskEntity>>>()
+    val stateTask = MutableLiveData<StateLog>()
 
     fun getListOfTasks(){
         mTaskLists.value = BaseModel(null,BaseModel.Companion.STATUS.LOADING,null)
@@ -19,9 +21,21 @@ class TaskListFragmentViewModel():ViewModel(){
             if(it.isEmpty()){
                 mTaskLists.value = BaseModel(it,BaseModel.Companion.STATUS.SUCCESS,"EMPTY_TASKS")
             }
-            val a = 1
         },{
             mTaskLists.value = BaseModel(null,BaseModel.Companion.STATUS.ERROR,it)
         })
+    }
+
+    fun taskId(){
+
+    }
+
+    fun removeItemFromTheList(taskid:String,userId:String){
+        stateTask.value = StateLog(StateLog.Companion.STATE.LOADING)
+        service.removeTaskFromFirestore(taskid,userId,{
+            stateTask.value = StateLog(StateLog.Companion.STATE.SUCCESS)
+        }){
+            stateTask.value = StateLog(StateLog.Companion.STATE.ERROR)
+        }
     }
 }

@@ -35,6 +35,7 @@ class TaskFormActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
     private var mDate = ""
 
 
+
     private var mLstPriorityEntity: MutableList<PriorityEntity> = mutableListOf()
     private var mLstPriorityId: MutableList<Int> = mutableListOf()
 
@@ -126,7 +127,7 @@ class TaskFormActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
         val description = txt_form_description.text.toString()
         val idPriority = priorityRadiobutton
         val date = mDate
-        val task = TaskEntity(userId!!, idPriority, title, description, date, false)
+        val task = TaskEntity("" ,userId!!, idPriority, title, description, date, false)
         viewModel.addNewTask(task)
 
     }

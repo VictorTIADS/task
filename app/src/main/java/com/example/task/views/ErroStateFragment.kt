@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_erro_state.*
 class ErroStateFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        error_task_message.text = arguments?.getString(TaskConstants.STATE.ERROR)
+//        error_task_message.text = arguments?.getString(TaskConstants.STATE.ERROR)
         return inflater.inflate(R.layout.fragment_erro_state, container, false)
     }
 

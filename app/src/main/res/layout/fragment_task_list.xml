@@ -5,13 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".views.TaskListFragment">
 
-    <include android:visibility="visible" layout="@layout/shimmer_with_hint_include"/>
+    <include android:visibility="visible" layout="@layout/shimmer_with_hint_include"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/item_list"/>

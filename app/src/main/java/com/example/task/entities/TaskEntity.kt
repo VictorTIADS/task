@@ -4,8 +4,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import java.io.Serializable
 
-data class TaskEntity(val userId:String = "", val priorityId: Int = 0, var title:String = "", var description: String = "", var dueDate: String = "", var complete: Boolean = false):Serializable{
-    constructor(mTask:TaskEntity?):this(mTask?.userId?:"",mTask?.priorityId?:0,mTask?.title?:"",mTask?.description?:"",mTask?.dueDate?:"",mTask?.complete?:false)
+data class TaskEntity(var taskId:String = "",val userId:String = "", val priorityId: Int = 0, var title:String = "", var description: String = "", var dueDate: String = "", var complete: Boolean = false):Serializable{
+    constructor(mTask:TaskEntity?):this(mTask?.taskId?:"",mTask?.userId?:"",mTask?.priorityId?:0,mTask?.title?:"",mTask?.description?:"",mTask?.dueDate?:"",mTask?.complete?:false)
 }
 
 
