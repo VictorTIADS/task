@@ -6,11 +6,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ic_launcher_removebg_monte_with_opacity"
     android:orientation="vertical"
-    android:padding="20dp">
+    >
+
+        <include layout="@layout/header_state_error" android:visibility="gone"/>
 
 
 
-        <include android:id="@+id/layoutIncludedHeaderHint" layout="@layout/hint_header" android:visibility="gone"/>
+        <include layout="@layout/hint_header"/>
 
 
 
@@ -27,8 +29,11 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@mipmap/ic_launcher"
-            app:civ_border_color="#000000"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            app:civ_border_color="#ffffff"
             app:civ_border_width="3dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,6 +46,7 @@
             android:layout_marginTop="10dp"
             android:textColor="#000000"
             android:textSize="20sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@id/profileHeaderImage"
             app:layout_constraintTop_toBottomOf="@id/profileHeaderImage"
             tools:text="Fulano Beltrano" />
@@ -53,6 +59,9 @@
             android:layout_marginTop="5dp"
             android:textColor="#000000"
             android:textSize="15dp"
+            android:visibility="gone"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/lblNameHeaderMenu"
             app:layout_constraintTop_toBottomOf="@id/lblNameHeaderMenu"
             tools:text="Fulanobeltrano@hotmail.com" />

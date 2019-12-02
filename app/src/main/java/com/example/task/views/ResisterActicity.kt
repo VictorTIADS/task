@@ -1,7 +1,5 @@
 package com.example.task.views
 
-import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,15 +10,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.task.constants.TaskConstants
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_resister_acticity.*
 import com.example.task.R
 import com.example.task.animation.*
 import com.example.task.model.BaseModel
-import com.example.task.model.MyUser
-import com.example.task.util.SecurityPreferences
+import com.example.task.model.StateLog
+import com.example.task.model.ValidationCredentialState
 import com.example.task.viewmodel.ResisterViewModel
+import org.jetbrains.anko.design.indefiniteSnackbar
+import org.jetbrains.anko.design.snackbar
 
 
 class ResisterActicity : AppCompatActivity() {
@@ -43,9 +45,11 @@ class ResisterActicity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(ResisterViewModel::class.java)
         viewModel.initSharedPreferences(this)
 
-        controlEnableComponents(false)
+
+
 
         setObservable()
+        controlEnableComponents(StateLog.Companion.STATE.IMAGEUNSELECTED)
 
 
         btnBack.setOnClickListener {
@@ -53,8 +57,8 @@ class ResisterActicity : AppCompatActivity() {
 
         }
         btnCadastrar.setOnClickListener {
-            startAnimation()
-            SignUpUser()
+
+            validateUserInfo()
 
 
         }
@@ -62,16 +66,6 @@ class ResisterActicity : AppCompatActivity() {
             selectImageFromGalery()
 
         }
-    }
-
-    private fun startAnimation() {
-        hideComponents()
-        userImage.startAniminMovingComponent { }
-        lblUserName.text = txtNome.text.toString()
-        lblUserEmail.text = txtEmail.text.toString()
-        lblUserName.startAniminShowingComponentLabels { }
-        lblUserEmail.startAniminShowingComponentLabels { }
-        loadingPhoto.startAniminShowingComponentLoader { }
 
     }
 
@@ -83,9 +77,7 @@ class ResisterActicity : AppCompatActivity() {
                 if (data?.data != null) {
                     setImageWithPicasso(data?.data!!)
                     uriImage = data?.data!!
-                    controlEnableComponents(true)
-
-
+                    controlEnableComponents(StateLog.Companion.STATE.IMAGESELECTED)
                 }
             }
         }
@@ -140,57 +132,57 @@ class ResisterActicity : AppCompatActivity() {
                     Log.i("aspk", "SUCCESS FIRESTORE USER")
                     animStatusLoading("Bem Vindo(a)...")
                     animationMaster()
-
-
-
-
-
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     Log.i("aspk", "ERROR FIRESTORE USER")
                 }
             }
         })
-
+        viewModel.stateCredentials.observe(this, Observer {
+            when (it.error){
+                ValidationCredentialState.Companion.ERROR.FALSE -> {
+                    startAnimation()
+                    viewModel.signUpUser(it.email!!,it.password!!,it.name!!)
+                }
+                ValidationCredentialState.Companion.ERROR.ALL -> {
+                    animateView(textInputLayoutResisterName)
+                    animateView(textInputLayoutResisterEmail)
+                    animateView(textInputLayoutResisterPassword)
+                    btnCadastrar.snackbar("Campos Obrigatórios")
+                }
+                ValidationCredentialState.Companion.ERROR.NAME -> {
+                    animateView(textInputLayoutResisterName)
+                    btnCadastrar.snackbar("Nome Obrigatório")
+                }
+                ValidationCredentialState.Companion.ERROR.EMAIL -> {
+                    animateView(textInputLayoutResisterEmail)
+                    btnCadastrar.snackbar("Preencha o Email Corretamente")
+                }
+                ValidationCredentialState.Companion.ERROR.SENHA -> {
+                    animateView(textInputLayoutResisterPassword)
+                    btnCadastrar.snackbar("Senha deve conter Min: 6 Caracteres")
+                }
+            }
+        })
     }
 
-    private fun animationMaster(){
-        userImage.animationMasterSlow {  }
-        lblUserName.animationMasterSlow {  }
-        lblUserEmail.animationMasterSlow {  }
-        lblStatusLoading.animationMasterSlow {  }
-        loadingPhoto.animationMasterSlow { callMainActivity() }
-
-
+    private fun animateView(view: View){
+        YoYo.with(Techniques.Shake)
+            .duration(500)
+            .playOn(view)
     }
 
-
-    private fun SignUpUser() {
-
+    private fun validateUserInfo() {
         userName = txtNome.text.toString()
         emailUser = txtEmail.text.toString()
         passwordUser = txtCadastroPassword.text.toString()
-
-        viewModel.signUpUser(emailUser, passwordUser,userName)
-
-
-//            createFireUser(emailUser,passwordUser,uriImage,nameUser,this){
-//                upLoadPhotoToFirebaseStorage(uriImage,nameUser,emailUser,this){uid,uri->
-//                    addingFireStoreToUser(uid,nameUser,uri,emailUser,this){
-//                        storeStringsOnSharedPreferences(it)
-//                        callMainActivity()
-//                    }
-//                }
-//            }
-
-
+        viewModel.validateUserOnResister(emailUser,passwordUser,userName)
     }
 
     private fun callMainActivity() {
         val callMain = Intent(this, MainActivity::class.java)
         startActivity(callMain)
         finish()
-
     }
 
     private fun selectImageFromGalery() {
@@ -204,31 +196,44 @@ class ResisterActicity : AppCompatActivity() {
     }
 
 
-    private fun controlEnableComponents(control: Boolean) {
-        txtNome.isEnabled = control
-        txtEmail.isEnabled = control
-        txtCadastroPassword.isEnabled = control
-        btnCadastrar.isEnabled = control
-        if (control) {
-            txtNome.requestFocus()
+
+    private fun controlEnableComponents(control: StateLog.Companion.STATE) {
+        val userPhotoAnimation = YoYo.with(Techniques.Bounce).duration(1500)
+        when (control){
+            StateLog.Companion.STATE.IMAGEUNSELECTED -> {
+                txtNome.isEnabled = false
+                txtEmail.isEnabled = false
+                userImage.isEnabled = true
+                txtCadastroPassword.isEnabled = false
+                btnCadastrar.isEnabled = false
+                btnCadastrar.indefiniteSnackbar("Clique na câmera para selecionar uma foto de perfil.")
+                txtNome.requestFocus()
+                userPhotoAnimation.repeat(5).playOn(userImage)
+            }
+            StateLog.Companion.STATE.IMAGESELECTED -> {
+                txtNome.isEnabled = true
+                txtEmail.isEnabled = true
+                btnCadastrar.snackbar("Ok.. Agora continue colocando seus dados.")
+                txtCadastroPassword.isEnabled = true
+                btnCadastrar.isEnabled = true
+                txtNome.requestFocus()
+            }
         }
 
+
+
     }
-
-
-
-
     private fun hideComponents() {
         toolbar.startAniminHidingComponent {
             toolbar.visibleGone()
-            laytxtNome.startAniminHidingComponent {
-                laytxtNome.visibleGone()
+            textInputLayoutResisterName.startAniminHidingComponent {
+                textInputLayoutResisterName.visibleGone()
             }
-            laytxtEmail.startAniminHidingComponent {
-                laytxtEmail.visibleGone()
+            textInputLayoutResisterEmail.startAniminHidingComponent {
+                textInputLayoutResisterEmail.visibleGone()
             }
-            laytxtPassword.startAniminHidingComponent {
-                laytxtPassword.visibleGone()
+            textInputLayoutResisterPassword.startAniminHidingComponent {
+                textInputLayoutResisterPassword.visibleGone()
             }
             lblInfoCad.startAniminHidingComponent {
                 lblInfoCad.visibleGone()
@@ -237,42 +242,44 @@ class ResisterActicity : AppCompatActivity() {
                 btnCadastrar.visibleGone()
             }
         }
-
-
     }
 
     private fun animStatusLoading(text:String){
         lblStatusLoading.text = text
         lblStatusLoading.startAnimnLoadingStatusMoving {}
     }
+
     private fun hideStatusLoading(){
         lblStatusLoading.startAnimnLoadingStatusHiding {  }
     }
 
-    object LOAD {
-
-        lateinit var pd: ProgressDialog
-
-
-        fun startDialog(message: String, context: Context) {
-            pd = ProgressDialog(context)
-            pd.setMessage(message)
-            pd.setCancelable(false)
-            pd.show()
-        }
-
-        fun updateDialogMessage(message: String) {
-            pd.setMessage(message)
-
-        }
-
-        fun stopLoadingDialog() {
-            pd.cancel()
-        }
-
+    private fun startAnimation() {
+        hideComponents()
+        userImage.startAniminMovingComponent { }
+        lblUserName.text = txtNome.text.toString()
+        lblUserEmail.text = txtEmail.text.toString()
+        lblUserName.startAniminShowingComponentLabels { }
+        lblUserEmail.startAniminShowingComponentLabels { }
+        loadingPhoto.startAniminShowingComponentLoader { }
 
     }
 
+    private fun animationMaster(){
+        animationYoyo(userImage){}
+        animationYoyo(lblUserName){}
+        animationYoyo(lblUserEmail){}
+        animationYoyo(lblStatusLoading){}
+        animationYoyo(loadingPhoto){callMainActivity()}
+    }
+    private fun animationYoyo(view:View,cabo:()->Unit){
+        YoYo.with(Techniques.SlideOutLeft)
+            .onEnd {
+                cabo()
+            }
+            .pivotY(-200f)
+            .duration(500)
+            .playOn(view)
+    }
 
 
 }

@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_circle_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/alert/ic_error_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,8 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_add_circle_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\victor.g.batista" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="opacityPercent" value="42" />
+                            <entry key="outputName" value="ic_noun_user_cancel_846789" />
+                            <entry key="sourceFile" value="C:\Users\victor.g.batista\Downloads\noun_User Cancel_846789.svg" />
                           </map>
                         </option>
                       </PersistentState>

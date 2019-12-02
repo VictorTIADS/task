@@ -8,6 +8,7 @@ import com.example.task.model.BaseModel
 import com.example.task.model.MyUser
 import com.example.task.model.StateLog
 import com.example.task.repository.RegisterRepository
+import com.example.task.util.CredencialValidator
 import com.example.task.util.SecurityPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,6 +20,7 @@ class MainViewModel : ViewModel(){
     private val service = RegisterRepository()
     val auth = FirebaseAuth.getInstance()
     val userDocumentLoaded = MutableLiveData<StateLog>()
+    val userIsLoged = MutableLiveData<StateLog>()
 
     fun initSharedPreferences(context: Context) {
         mSharedPreferences = SecurityPreferences(context)
@@ -26,7 +28,7 @@ class MainViewModel : ViewModel(){
     }
 
     fun isDocumentUserLoaded() {
-        if (mSharedPreferences.getStoreString(TaskConstants.KEY.USER_PROFILE) != "") {
+        if (CredencialValidator.validateSharedPreferencesData(getIdCurrentUser(),getNameCurrentUser(),getEmailCurrentUser(),getPhotoCurrentUser())) {
             userDocumentLoaded.value = StateLog(StateLog.Companion.STATE.LOADED)
         } else {
             userDocumentLoaded.value = StateLog(StateLog.Companion.STATE.NOTLOADED)
@@ -34,14 +36,12 @@ class MainViewModel : ViewModel(){
     }
 
     fun getUserData(){
-        user.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING)
+        user.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING,null)
         service.documentoUser(getIdCurrentUser()!!,{
-            user.value = BaseModel(MyUser(auth.currentUser,it.toObject(MyUser::class.java)), BaseModel.Companion.STATUS.SUCCESS)
-            if(userDocumentLoaded.value?.status==StateLog.Companion.STATE.NOTLOADED){
-                storeStringsOnSharedPreferences(user.value?.data)
-            }
+            storeStringsOnSharedPreferences(it.toObject(MyUser::class.java))
+            user.value = BaseModel(MyUser(auth.currentUser,it.toObject(MyUser::class.java)), BaseModel.Companion.STATUS.SUCCESS,null)
         },{
-            user.value = BaseModel(null, BaseModel.Companion.STATUS.ERROR)
+            user.value = BaseModel(null, BaseModel.Companion.STATUS.ERROR,it)
         })
     }
     private fun storeStringsOnSharedPreferences(user: MyUser?) {
@@ -54,6 +54,17 @@ class MainViewModel : ViewModel(){
     fun clearSharedPreferences(){
         mSharedPreferences.clear()
     }
+
+    fun signOutUser(){
+        service.signOutFirebase()
+        mSharedPreferences.clear()
+        userIsLoged.value = StateLog(StateLog.Companion.STATE.FALSE)
+    }
+//    viewModel.clearSharedPreferences()
+//    FirebaseAuth.getInstance().signOut()
+//    startActivity(Intent(baseContext, LoginActivity::class.java))
+//    finish()
+
 
     fun getIdCurrentUser() = mSharedPreferences.getStoreString(TaskConstants.KEY.USER_ID)
     fun getNameCurrentUser() = mSharedPreferences.getStoreString(TaskConstants.KEY.USER_NAME)

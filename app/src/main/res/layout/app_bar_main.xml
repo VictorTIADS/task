@@ -9,26 +9,63 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:elevation="0dp"
+        android:background="@drawable/back_app_bar"
+        android:theme="@style/AppTheme.PopupOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="@drawable/back_tool_bar"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+
+
+
     </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatAddTask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="12dp"
+        app:srcCompat="@drawable/plus" />
+
+<!--    <include layout="@layout/content_main" />-->
+
+
+
+
 
     <FrameLayout
         android:id="@+id/frameAppBarMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+<!--        <androidx.viewpager.widget.ViewPager-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="fill_parent"-->
+<!--            android:id="@+id/pager">-->
+<!--            <com.google.android.material.tabs.TabLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:tabMode="fixed"-->
+<!--                app:tabGravity="fill"-->
+<!--                android:id="@+id/tablelayout"/>-->
+
+<!--        </androidx.viewpager.widget.ViewPager>-->
 
 
-<!--    <include layout="@layout/content_main" />-->
-
+    </FrameLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,7 +13,11 @@ class TaskConstants {
         val KEY = "taskFilterKey"
         val COMPLETE = 1
         val TODO = 0
+        val TODAY = 2
 
+    }
+    object STATE{
+        val ERROR = "STATE_ERROR"
     }
     object REQUEST{
         val CODE_PICTURE = 0

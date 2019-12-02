@@ -2,19 +2,26 @@ package com.example.task.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
+import com.example.task.model.ValidationCredentialState
+import com.example.task.util.setMessageOfError
 import com.example.task.viewmodel.LoginViewModel
 import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_resister_acticity.*
+import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.design.snackbar
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,15 +44,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setObservable() {
-        viewModel.safeState.observe(this, Observer {
+        viewModel.isUserLoged.observe(this, Observer {
             when (it.status) {
-                StateLog.Companion.STATE.LOGDED -> {
+                StateLog.Companion.STATE.TRUE -> {
                     Log.i("aspk", "USUÁRIO LOGADO")
                     callMainactivity()
 
 
                 }
-                StateLog.Companion.STATE.NOTLOGED -> {
+                StateLog.Companion.STATE.FALSE -> {
                     Log.i("aspk", "USUÁRIO NÃO LOGADO")
                 }
             }
@@ -61,10 +68,40 @@ class LoginActivity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     controlVisible(BaseModel.Companion.STATUS.ERROR)
+                    btnLogin.longSnackbar(it.message.toString())
 
                 }
             }
         })
+        viewModel.stateCredentials.observe(this, Observer {
+            when (it.error){
+
+                ValidationCredentialState.Companion.ERROR.FALSE ->{
+                    it.email?.let { it1 -> it.password?.let { it2 -> viewModel.signIn(it1, it2) } }
+                }
+                ValidationCredentialState.Companion.ERROR.ALL ->{
+                    animateView(textInputLayoutLoginEmail)
+                    animateView(textInputLayoutLoginPassword)
+                    btnLogin.snackbar("Email e Senha Obrigatórios")
+                }
+                ValidationCredentialState.Companion.ERROR.EMAIL ->{
+                    animateView(textInputLayoutLoginEmail)
+                    btnLogin.snackbar("Email Obrigatório")
+
+                }
+                ValidationCredentialState.Companion.ERROR.SENHA ->{
+                    animateView(textInputLayoutLoginPassword)
+                    btnLogin.snackbar("Senha Obrigatória")
+                }
+
+
+            }
+        })
+    }
+    private fun animateView(view: View){
+        YoYo.with(Techniques.Shake)
+            .duration(500)
+            .playOn(view)
     }
 
     private fun controlVisible(status: BaseModel.Companion.STATUS) {
@@ -100,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun configureTextInputPassword() {
-        //txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+        txtLoginPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
         txtLoginPassword.transformationMethod = PasswordTransformationMethod()
     }
 
@@ -114,7 +151,32 @@ class LoginActivity : AppCompatActivity() {
     private fun handleLogin() {
         val email = txtLoginEmail.text.toString()
         val password = txtLoginPassword.text.toString()
-        viewModel.signIn(email, password)
+        viewModel.validateCredential(email,password)
+//        viewModel.signIn(email, password)
+//        when {
+//            CredencialValidator.validateEmail(email) && CredencialValidator.validatePassword(password) -> {
+//                toast("All Right")
+//            }
+//            !CredencialValidator.validateEmail(email) && !CredencialValidator.validatePassword(
+//                password
+//            ) -> {
+//                txtLoginEmail.error = "Campo Obrigatório"
+//                txtLoginPassword.error = "Campo Obrigatório"
+//
+//            }
+//            !CredencialValidator.validateEmail(email) -> {
+//                txtLoginEmail.error = "Campo Obrigatório"
+//
+//            }
+//            !CredencialValidator.validatePassword(password) -> {
+//                txtLoginPassword.error = "Campo Obrigatório"
+//
+//            }
+//
+//
+//        }
+
+
     }
 
 
