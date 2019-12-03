@@ -1,28 +1,24 @@
 package com.example.task.repository
 
-import android.app.AuthenticationRequiredException
 import android.net.Uri
 import android.util.Log
 import com.example.task.entities.TaskEntity
 import com.example.task.model.MyUser
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.core.UserData
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class RegisterRepository {
 
     private val auth = FirebaseAuth.getInstance()
     private val fire = FirebaseFirestore.getInstance()
+    private val instanceId = FirebaseInstanceId.getInstance()
 
     fun signUpUser(
         userEmail: String,
@@ -39,6 +35,8 @@ class RegisterRepository {
             }
 
     }
+
+
     fun signOutFirebase(){
         auth.signOut()
     }
