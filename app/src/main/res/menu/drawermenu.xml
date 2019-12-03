@@ -8,6 +8,10 @@
                 android:id="@+id/MenuItemInicio"
                 android:icon="@drawable/ic_home_black_24dp"
                 android:title="Início" />
+            <item
+                android:id="@+id/MenuItemDashB"
+                android:icon="@drawable/ic_dashboard_1"
+                android:title="Dashboard" />
         </menu>
 
     </item>

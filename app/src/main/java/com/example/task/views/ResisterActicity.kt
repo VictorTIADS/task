@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.daimajia.androidanimations.library.Techniques
@@ -21,6 +22,7 @@ import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.model.ValidationCredentialState
 import com.example.task.viewmodel.ResisterViewModel
+import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.design.indefiniteSnackbar
 import org.jetbrains.anko.design.snackbar
 
@@ -206,14 +208,20 @@ class ResisterActicity : AppCompatActivity() {
                 userImage.isEnabled = true
                 txtCadastroPassword.isEnabled = false
                 btnCadastrar.isEnabled = false
-                btnCadastrar.indefiniteSnackbar("Clique na câmera para selecionar uma foto de perfil.")
+                val mySnackBar = btnCadastrar.indefiniteSnackbar("Clique na câmera para selecionar uma foto de perfil.")
+                mySnackBar.view.backgroundColor = ContextCompat.getColor(this,R.color.colorRed)
+                userImage.borderColor = ContextCompat.getColor(this,R.color.colorRed)
+                userImage.borderWidth = 8
                 txtNome.requestFocus()
                 userPhotoAnimation.repeat(5).playOn(userImage)
             }
             StateLog.Companion.STATE.IMAGESELECTED -> {
                 txtNome.isEnabled = true
                 txtEmail.isEnabled = true
-                btnCadastrar.snackbar("Ok.. Agora continue colocando seus dados.")
+                userImage.borderColor = ContextCompat.getColor(this,R.color.CadastroColorPrimaryDark)
+                userImage.borderWidth = 5
+                val mySnackbar = btnCadastrar.snackbar("Ok.. Agora continue colocando seus dados.")
+                mySnackbar.view.backgroundColor = ContextCompat.getColor(this,R.color.colorGreen)
                 txtCadastroPassword.isEnabled = true
                 btnCadastrar.isEnabled = true
                 txtNome.requestFocus()

@@ -30,7 +30,11 @@ import com.example.task.viewmodel.TaskListFragmentViewModel
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener
 import kotlinx.android.synthetic.main.activity_task_form.*
 import kotlinx.android.synthetic.main.item_list.*
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.noButton
+import org.jetbrains.anko.support.v4.alert
+import org.jetbrains.anko.yesButton
 
 lateinit var mContext: Context
 lateinit var viewModel: TaskListFragmentViewModel
@@ -88,7 +92,16 @@ class TaskListFragment : Fragment(), View.OnClickListener {
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT){
             override fun onSwiped(taskViewHolder: RecyclerView.ViewHolder, direction: Int) {
-                viewModel.removeItemFromTheList(taskList[taskViewHolder.adapterPosition].taskId,taskList[taskViewHolder.adapterPosition].userId)
+                val box = alert("Deseja realmente deletar esta tarefa?", "Deletar Tarefa") {
+                    yesButton {
+                        viewModel.removeItemFromTheList(taskList[taskViewHolder.adapterPosition].taskId,taskList[taskViewHolder.adapterPosition].userId)
+                    }
+                    noButton { loadTask()}
+
+                }
+                box.isCancelable = false
+                box.show()
+
             }
 
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
