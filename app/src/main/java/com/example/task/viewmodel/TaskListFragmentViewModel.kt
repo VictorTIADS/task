@@ -8,9 +8,8 @@ import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.repository.RegisterRepository
 
-class TaskListFragmentViewModel():ViewModel(){
+class TaskListFragmentViewModel(val service:RegisterRepository):ViewModel(){
 
-    private val service = RegisterRepository()
     val mTaskLists = MutableLiveData<BaseModel<MutableList<TaskEntity>>>()
     val stateTask = MutableLiveData<StateLog>()
 
@@ -24,10 +23,6 @@ class TaskListFragmentViewModel():ViewModel(){
         },{
             mTaskLists.value = BaseModel(null,BaseModel.Companion.STATUS.ERROR,it)
         })
-    }
-
-    fun taskId(){
-
     }
 
     fun removeItemFromTheList(taskid:String,userId:String){

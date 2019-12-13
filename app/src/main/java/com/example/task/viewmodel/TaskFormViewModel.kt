@@ -7,10 +7,9 @@ import com.example.task.entities.TaskEntity
 import com.example.task.model.BaseModel
 import com.example.task.repository.RegisterRepository
 
-class TaskFormViewModel() : ViewModel() {
+class TaskFormViewModel(val service:RegisterRepository) : ViewModel() {
 
 
-    private val service = RegisterRepository()
     val mTask = MutableLiveData<BaseModel<TaskEntity>>()
 
     fun addNewTask(task: TaskEntity) {

@@ -10,9 +10,9 @@
 
     <ImageView
         android:id="@+id/empty_task_icon"
-        android:layout_width="291dp"
-        android:layout_marginBottom="10dp"
+        android:layout_width="0dp"
         android:layout_height="123dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/empty_task_with_opacity"
         app:layout_constraintBottom_toTopOf="@id/empty_task_message"
         app:layout_constraintEnd_toEndOf="parent"

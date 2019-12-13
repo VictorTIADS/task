@@ -13,12 +13,11 @@ import com.example.task.repository.RegisterRepository
 import com.example.task.util.CredencialValidator
 import com.example.task.util.SecurityPreferences
 
-class ResisterViewModel : ViewModel() {
+class ResisterViewModel(val service:RegisterRepository) : ViewModel() {
 
     val savePhoto = MutableLiveData<BaseModel<Uri>>()
     val mUser = MutableLiveData<BaseModel<MyUser>>()
     val finalUser = MutableLiveData<BaseModel<MyUser>>()
-    val service = RegisterRepository()
     val stateCredentials = MutableLiveData<ValidationCredentialState>()
     lateinit var mSharedPreferences: SecurityPreferences
 
@@ -88,6 +87,8 @@ class ResisterViewModel : ViewModel() {
     fun initSharedPreferences(context: Context) {
         mSharedPreferences = SecurityPreferences(context)
     }
+
+
 
     private fun storeStringsOnSharedPreferences(user: MyUser) {
         mSharedPreferences.storeString(TaskConstants.KEY.USER_ID, user.userId)

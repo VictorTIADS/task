@@ -23,7 +23,7 @@
         android:id="@+id/error_task_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Não foi possível seus dados.\nVerifique sua conexão com a internet."
+        android:text="Não foi possível carregar seus dados.\nVerifique sua conexão com a internet."
         android:textAlignment="center"
         android:layout_marginBottom="60dp"
         app:layout_constraintVertical_chainStyle="packed"

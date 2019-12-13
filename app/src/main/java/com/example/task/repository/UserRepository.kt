@@ -29,38 +29,18 @@ class UserRepository private constructor(context: Context) {
         var userEntity:UserEntity? = null
         try {
             val cursor: Cursor
-
             val db = mTaskDataBaseHelper.readableDatabase
-
-            val projection = arrayOf(
-                DataBaseConstants.USER.COLUMNS.ID,
-                DataBaseConstants.USER.COLUMNS.NAME,
-                DataBaseConstants.USER.COLUMNS.EMAIL,
-                DataBaseConstants.USER.COLUMNS.PASSWORD)
-
+            val projection = arrayOf(DataBaseConstants.USER.COLUMNS.ID, DataBaseConstants.USER.COLUMNS.NAME, DataBaseConstants.USER.COLUMNS.EMAIL, DataBaseConstants.USER.COLUMNS.PASSWORD)
             val selection = "${DataBaseConstants.USER.COLUMNS.EMAIL} = ? AND ${DataBaseConstants.USER.COLUMNS.PASSWORD} = ?"
-
             val selectionArgs = arrayOf(email,password)
-
-            cursor = db.query(
-                DataBaseConstants.USER.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null)
-
+            cursor = db.query(DataBaseConstants.USER.TABLE_NAME, projection, selection, selectionArgs, null, null, null)
             if (cursor.count>0){
                 cursor.moveToFirst()
                 val userId= cursor.getInt(cursor.getColumnIndex(DataBaseConstants.USER.COLUMNS.ID))
                 val userName= cursor.getString(cursor.getColumnIndex(DataBaseConstants.USER.COLUMNS.NAME))
                 val userEmail= cursor.getString(cursor.getColumnIndex(DataBaseConstants.USER.COLUMNS.EMAIL))
-
                 userEntity = UserEntity(userId,userName,userEmail)
-
             }
-
             cursor.close()
         } catch (e: Exception) {
             return userEntity
@@ -106,8 +86,6 @@ class UserRepository private constructor(context: Context) {
         insertValues.put(DataBaseConstants.USER.COLUMNS.NAME, name)
         insertValues.put(DataBaseConstants.USER.COLUMNS.EMAIL, email)
         insertValues.put(DataBaseConstants.USER.COLUMNS.PASSWORD, password)
-
-
         return db.insert(DataBaseConstants.USER.TABLE_NAME, null, insertValues).toInt()
     }
 }

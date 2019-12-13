@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
+import com.example.task.animation.showCanSwipeStartActivity
+import com.example.task.animation.showCanSwipeStartActivityBack
 import com.example.task.entities.TaskEntity
 import kotlinx.android.synthetic.main.item_list.view.*
 import org.jetbrains.anko.backgroundColor
@@ -45,7 +47,7 @@ class TaskListAdapter( val context: Context,val list: MutableList<TaskEntity>) :
                 priority.backgroundColor = ContextCompat.getColor(context,R.color.colorBlue)
             }
         }
-
+        holder.itemView.showCanSwipeStartActivity{holder.itemView.showCanSwipeStartActivityBack { }}
         holder.itemView.setOnClickListener {
             YoYo.with(Techniques.Pulse)
                 .duration(350)

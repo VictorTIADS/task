@@ -33,11 +33,16 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.fragment_erro_state.*
+import kotlinx.android.synthetic.main.fragment_erro_state.view.*
 import kotlinx.android.synthetic.main.header.*
 import kotlinx.android.synthetic.main.header.view.*
 import kotlinx.android.synthetic.main.header_state_error.*
+import kotlinx.android.synthetic.main.header_state_error.view.*
 import kotlinx.android.synthetic.main.hint_header.*
+import kotlinx.android.synthetic.main.hint_header.view.*
 import org.jetbrains.anko.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mToggle: ActionBarDrawerToggle
     private lateinit var mPriorityBusiness: PriorityBusiness
     private lateinit var mToolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModel()
     private lateinit var mHeaderInfo: View
     lateinit var mViewPager:ViewPager
     lateinit var mTabLayout:TabLayout
@@ -54,7 +59,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.initSharedPreferences(this)
         viewModel.getUserData()
 
@@ -93,15 +97,32 @@ class MainActivity : AppCompatActivity() {
                 .playOn(it)
         }
         mHeaderInfo.setOnClickListener {
+            if (mHeaderInfo.profileHeaderImage.visibility == View.VISIBLE){
+                startSomeFragment(UserInfoFragment.newInstance(viewModel.getNameCurrentUser(),viewModel.getEmailCurrentUser(),viewModel.getPhotoCurrentUser()))
+                floatAddTask.hide()
+                mDrawerLayout.closeDrawers()
+            }else{
+                val box = alert(
+                    "Pedimos desculpas, não conseguimos carregar seus dados.\n\nPara Resolver, efetue novamente o login.",
+                    "Ops!, Algo de Errado Aconteceu"
+                ) {
+                    okButton {
+                        viewModel.clearSharedPreferences()
+                        FirebaseAuth.getInstance().signOut()
+                        startActivity(Intent(baseContext, LoginActivity::class.java))
+                        finish()
+                    }
 
-            startSomeFragment(UserInfoFragment.newInstance(viewModel.getNameCurrentUser(),viewModel.getEmailCurrentUser(),viewModel.getPhotoCurrentUser()))
-            floatAddTask.hide()
-            mDrawerLayout.closeDrawers()
+                }
+                box.show()
+            }
+
+
         }
 
         NavigationViewMain.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.userImage -> {
+                R.id.MenuItemNews -> {
 
                     true
                 }
@@ -195,8 +216,8 @@ class MainActivity : AppCompatActivity() {
 
             }
             BaseModel.Companion.STATUS.ERROR -> {
-                my_hind_shimmer_header.visibility = View.GONE
-                header_state_error.visibility = View.VISIBLE
+                mHeaderInfo.my_hind_shimmer_header.visibility = View.GONE
+                mHeaderInfo.header_state_error.visibility = View.VISIBLE
             }
         }
     }

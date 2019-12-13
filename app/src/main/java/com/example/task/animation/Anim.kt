@@ -225,6 +225,55 @@ fun View.radioFadeOut(ended: () -> Unit){
         })
 }
 
+fun View.showCanSwipeStartActivity(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(250)
+        .translationX(100f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+fun View.showCanSwipeStartActivityBack(ended: () -> Unit){
+    this.animate()
+        .setInterpolator(object : FastOutSlowInInterpolator() {})
+        .setDuration(250)
+        .translationX(-0f)
+        .setListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animator?) {
+                ended()
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {
+
+            }
+
+            override fun onAnimationStart(p0: Animator?) {
+
+            }
+        })
+}
+
+
+
 
 fun View.visibleGone() {
     this.visibility = View.GONE

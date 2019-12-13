@@ -8,9 +8,7 @@ class CredencialValidator {
     companion object {
         fun validateEmail(email: String): Boolean = email.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
         fun validateName(name: String): Boolean = name.isNotEmpty() || name.isNotBlank()
-        fun validateUri(uri: Uri): Boolean = uri != Uri.EMPTY
         fun validatePassword(password: String): Boolean = password.isNotEmpty() && (password.length > 6)
-
         fun validateSharedPreferencesData(
             userId: String?,
             userName: String?,

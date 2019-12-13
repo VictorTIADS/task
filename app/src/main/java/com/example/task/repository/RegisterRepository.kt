@@ -8,17 +8,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.RemoteMessage
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
-class RegisterRepository {
+class RegisterRepository(val auth : FirebaseAuth) {
 
-    private val auth = FirebaseAuth.getInstance()
     private val fire = FirebaseFirestore.getInstance()
-    private val instanceId = FirebaseInstanceId.getInstance()
 
     fun signUpUser(
         userEmail: String,
@@ -37,13 +32,20 @@ class RegisterRepository {
     }
 
 
-    fun signOutFirebase(){
+    fun signOutFirebase() {
         auth.signOut()
     }
-    fun isUserLogedOnFirebase():Boolean{
-        return auth.currentUser!=null
+
+    fun isUserLogedOnFirebase(): Boolean {
+        return auth.currentUser != null
     }
-    fun removeTaskFromFirestore(taskid:String,userId:String,success: () -> Unit, error: (message: String?) -> Unit){
+
+    fun removeTaskFromFirestore(
+        taskid: String,
+        userId: String,
+        success: () -> Unit,
+        error: (message: String?) -> Unit
+    ) {
         fire.collection("users")
             .document(userId)
             .collection("Tasks")
@@ -53,6 +55,7 @@ class RegisterRepository {
             }
             .addOnFailureListener {
                 error(it.message)
+
             }
     }
 
@@ -110,11 +113,15 @@ class RegisterRepository {
             .addOnCompleteListener {
                 if (it.isSuccessful) {
                     success(it.result?.user)
+
                 }
 
             }
             .addOnFailureListener {
                 error(it.message)
+                signOutFirebase()
+
+                Log.i("aspk","Error: ${it.message}")
                 //implementar mesagem com error code em portugues
                 //val a  = (it as FirebaseAuthException).errorCode
             }
@@ -127,15 +134,21 @@ class RegisterRepository {
         success: (doc: DocumentSnapshot) -> Unit,
         error: (String?) -> Unit
     ) {
-        fire.collection("users")
-            .document(userId)
-            .get()
-            .addOnSuccessListener {
-                success(it)
-            }
-            .addOnFailureListener {
-                error(it.message)
-            }
+        if (userId.isNotBlank()) {
+            fire.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener {
+                    success(it)
+                }
+                .addOnFailureListener {
+                    error(it.message)
+                }
+        } else {
+            error("Identificação Nula")
+            signOutFirebase()
+        }
+
 
     }
 
@@ -152,7 +165,7 @@ class RegisterRepository {
                 fire.collection("users")
                     .document("${task.userId}")
                     .collection("Tasks")
-                    .document(it.id).update("taskId",it.id)
+                    .document(it.id).update("taskId", it.id)
                     .addOnSuccessListener {
                         success()
                     }
@@ -170,7 +183,10 @@ class RegisterRepository {
     }
 
 
-    fun getUserTasksOnFirebase(success: (list: MutableList<TaskEntity>) -> Unit, error: (message: String?) -> Unit) {
+    fun getUserTasksOnFirebase(
+        success: (list: MutableList<TaskEntity>) -> Unit,
+        error: (message: String?) -> Unit
+    ) {
         fire.collection("users")
             .document("${auth.uid}")
             .collection("Tasks")

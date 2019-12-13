@@ -9,9 +9,9 @@
                 android:icon="@drawable/ic_home_black_24dp"
                 android:title="Início" />
             <item
-                android:id="@+id/MenuItemDashB"
-                android:icon="@drawable/ic_dashboard_1"
-                android:title="Dashboard" />
+                android:id="@+id/MenuItemNews"
+                android:icon="@drawable/ic_news"
+                android:title="Notícias" />
         </menu>
 
     </item>

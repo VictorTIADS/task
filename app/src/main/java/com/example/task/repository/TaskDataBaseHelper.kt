@@ -5,10 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.task.constants.DataBaseConstants
 
-class TaskDataBaseHelper(context: Context) : SQLiteOpenHelper(
-    context, DATABASE_NAME, null,
-    DATABASE_VERSION
-) {
+class TaskDataBaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private val DATABASE_VERSION: Int = 1
@@ -16,7 +13,7 @@ class TaskDataBaseHelper(context: Context) : SQLiteOpenHelper(
     }
 
     private val createTableUser = """CREATE TABLE ${DataBaseConstants.USER.TABLE_NAME} (
-                ${DataBaseConstants.USER.COLUMNS.ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 ${DataBaseConstants.USER.COLUMNS.NAME} TEXT,
                 ${DataBaseConstants.USER.COLUMNS.EMAIL} TEXT,
                 ${DataBaseConstants.USER.COLUMNS.PASSWORD} TEXT);"""

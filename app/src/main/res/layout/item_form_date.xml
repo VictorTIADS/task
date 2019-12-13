@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_date"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="24dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="24dp"
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/form_priority_color_date"
+            android:layout_width="6dp"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@android:color/transparent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/lbl_form_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="Data: "
+                android:textSize="14dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/icon_form_calendar"
+                android:layout_width="28dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:src="@drawable/ic_insert_invitation_black_24dp"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="@+id/lbl_form_date"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_form_date" />
+
+
+            <TextView
+                android:id="@+id/lbl_content_date_from_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:text="00/00/0000"
+                android:textSize="20dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/lbl_form_date"
+                app:layout_constraintTop_toBottomOf="@+id/lbl_form_date" />
+
+            <ImageView
+                android:id="@+id/icon_from_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit_black_24dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

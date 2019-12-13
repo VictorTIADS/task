@@ -1,7 +1,6 @@
 package com.example.task.views
 
 import android.app.DatePickerDialog
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.DatePicker
@@ -20,9 +19,14 @@ import com.example.task.model.StateLog
 import com.example.task.util.SecurityPreferences
 import com.example.task.viewmodel.TaskFormViewModel
 import kotlinx.android.synthetic.main.activity_task_form.*
+import kotlinx.android.synthetic.main.item_form_date.*
+import kotlinx.android.synthetic.main.item_form_description.*
+import kotlinx.android.synthetic.main.item_form_rdpriority.*
+import kotlinx.android.synthetic.main.item_form_title.*
 import kotlinx.android.synthetic.main.toolbar_without_corners.*
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.design.longSnackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -30,7 +34,7 @@ class TaskFormActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
     private lateinit var mPriorityBusiness: PriorityBusiness
     private lateinit var mSecurityPreferences: SecurityPreferences
     private val mSimpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd/MM/yy")
-    lateinit var viewModel: TaskFormViewModel
+    private val viewModel: TaskFormViewModel by viewModel()
     private var priorityRadiobutton = 0
     private var mDate = ""
 
@@ -45,7 +49,6 @@ class TaskFormActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
 
 
         //INSTANCIA
-        viewModel = ViewModelProviders.of(this).get(TaskFormViewModel::class.java)
         mPriorityBusiness = PriorityBusiness(this)
         mSecurityPreferences = SecurityPreferences(this)
         //LOADS
@@ -62,6 +65,9 @@ class TaskFormActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener
 //        }
 
         icon_form_calendar.setOnClickListener {
+            opendDatePickerDialog()
+        }
+        card_date.setOnClickListener {
             opendDatePickerDialog()
         }
         icon_from_edit.setOnClickListener {

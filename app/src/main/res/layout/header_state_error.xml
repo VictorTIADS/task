@@ -17,7 +17,8 @@
         android:layout_gravity="center"
         android:textAlignment="center"
         android:textColor="#000000"
-        android:text="Não foi possível carregar suas informações."/>
+        android:text="Não foi possível carregar suas informações."
+        android:layout_marginBottom="20dp"/>
 
 
 

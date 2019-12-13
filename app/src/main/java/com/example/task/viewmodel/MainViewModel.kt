@@ -3,6 +3,7 @@ package com.example.task.viewmodel
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.task.constants.TaskConstants
 import com.example.task.model.BaseModel
 import com.example.task.model.MyUser
@@ -12,12 +13,14 @@ import com.example.task.util.CredencialValidator
 import com.example.task.util.SecurityPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MainViewModel : ViewModel(){
+class MainViewModel(val service:RegisterRepository) : ViewModel(){
 
     lateinit var mSharedPreferences: SecurityPreferences
     val user = MutableLiveData<BaseModel<MyUser>>()
-    private val service = RegisterRepository()
     val auth = FirebaseAuth.getInstance()
     val userDocumentLoaded = MutableLiveData<StateLog>()
     val userIsLoged = MutableLiveData<StateLog>()
@@ -37,12 +40,16 @@ class MainViewModel : ViewModel(){
 
     fun getUserData(){
         user.value = BaseModel(null, BaseModel.Companion.STATUS.LOADING,null)
-        service.documentoUser(getIdCurrentUser()!!,{
-            storeStringsOnSharedPreferences(it.toObject(MyUser::class.java))
-            user.value = BaseModel(MyUser(auth.currentUser,it.toObject(MyUser::class.java)), BaseModel.Companion.STATUS.SUCCESS,null)
-        },{
-            user.value = BaseModel(null, BaseModel.Companion.STATUS.ERROR,it)
-        })
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                service.documentoUser(getIdCurrentUser()!!,{
+                    storeStringsOnSharedPreferences(it.toObject(MyUser::class.java))
+                    user.value = BaseModel(MyUser(auth.currentUser,it.toObject(MyUser::class.java)), BaseModel.Companion.STATUS.SUCCESS,null)
+                },{
+                    user.value = BaseModel(null, BaseModel.Companion.STATUS.ERROR,it)
+                })
+            }
+        }
     }
     private fun storeStringsOnSharedPreferences(user: MyUser?) {
         user?.let {

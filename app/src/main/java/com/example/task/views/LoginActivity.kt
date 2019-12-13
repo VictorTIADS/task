@@ -2,37 +2,32 @@ package com.example.task.views
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.task.R
 import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.model.ValidationCredentialState
-import com.example.task.util.setMessageOfError
 import com.example.task.viewmodel.LoginViewModel
-import com.google.firebase.FirebaseApp
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var viewModel: LoginViewModel
+     val viewModel: LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         viewModel.initSharedPreferences(this)
-        FirebaseApp.initializeApp(this)
+
         configureTextInputPassword()
         setObservable()
         viewModel.isLogedIn()
@@ -54,6 +49,7 @@ class LoginActivity : AppCompatActivity() {
                 }
                 StateLog.Companion.STATE.FALSE -> {
                     Log.i("aspk", "USUÁRIO NÃO LOGADO")
+
                 }
             }
         })
@@ -68,8 +64,8 @@ class LoginActivity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     controlVisible(BaseModel.Companion.STATUS.ERROR)
-                    btnLogin.longSnackbar(it.message.toString())
-
+//                    btnLogin.longSnackbar(it.message.toString())
+                    supportFragmentManager.beginTransaction().show(ErroStateFragment.newInstance("")).commit()
                 }
             }
         })

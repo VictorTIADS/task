@@ -25,12 +25,13 @@ import com.example.task.viewmodel.ResisterViewModel
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.design.indefiniteSnackbar
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ResisterActicity : AppCompatActivity() {
 
     lateinit var uriImage: Uri
-    lateinit var viewModel: ResisterViewModel
+    private val viewModel: ResisterViewModel by viewModel()
     lateinit var userName: String
     lateinit var emailUser: String
     lateinit var passwordUser: String
@@ -44,7 +45,6 @@ class ResisterActicity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-        viewModel = ViewModelProviders.of(this).get(ResisterViewModel::class.java)
         viewModel.initSharedPreferences(this)
 
 
@@ -100,6 +100,7 @@ class ResisterActicity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     Log.i("aspk", "ERROR AUTHENTICATION")
+                    supportFragmentManager.beginTransaction().show(ErroStateFragment.newInstance("")).commit()
                 }
             }
         })
@@ -120,6 +121,7 @@ class ResisterActicity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     Log.i("aspk", "ERROR UPLOADING PHOTO")
+                    supportFragmentManager.beginTransaction().show(ErroStateFragment.newInstance("")).commit()
                 }
             }
         })
@@ -137,6 +139,8 @@ class ResisterActicity : AppCompatActivity() {
                 }
                 BaseModel.Companion.STATUS.ERROR -> {
                     Log.i("aspk", "ERROR FIRESTORE USER")
+                    supportFragmentManager.beginTransaction().show(ErroStateFragment.newInstance("")).commit()
+
                 }
             }
         })
@@ -213,7 +217,7 @@ class ResisterActicity : AppCompatActivity() {
                 userImage.borderColor = ContextCompat.getColor(this,R.color.colorRed)
                 userImage.borderWidth = 8
                 txtNome.requestFocus()
-                userPhotoAnimation.repeat(5).playOn(userImage)
+                userPhotoAnimation.repeat(4).playOn(userImage)
             }
             StateLog.Companion.STATE.IMAGESELECTED -> {
                 txtNome.isEnabled = true

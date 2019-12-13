@@ -14,12 +14,11 @@ import com.example.task.util.CredencialValidator.Companion.validateEmail
 import com.example.task.util.CredencialValidator.Companion.validatePassword
 import com.example.task.util.SecurityPreferences
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(val service : RegisterRepository) : ViewModel() {
 
     val isUserLoged = MutableLiveData<StateLog>()
     lateinit var mSharedPreferences: SecurityPreferences
     val currentUser = MutableLiveData<BaseModel<MyUser>>()
-    private val service = RegisterRepository()
     val stateCredentials = MutableLiveData<ValidationCredentialState>()
 
 
@@ -112,5 +111,8 @@ class LoginViewModel : ViewModel() {
             mSharedPreferences.storeString(TaskConstants.KEY.USER_PROFILE, user.userProfile)
         }
     }
+
+
+
 
 }
