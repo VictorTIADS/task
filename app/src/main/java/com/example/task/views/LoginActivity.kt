@@ -15,6 +15,7 @@ import com.example.task.model.BaseModel
 import com.example.task.model.StateLog
 import com.example.task.model.ValidationCredentialState
 import com.example.task.viewmodel.LoginViewModel
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.design.snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     controlVisible(BaseModel.Companion.STATUS.LOADING)
                 }
                 BaseModel.Companion.STATUS.SUCCESS -> {
-                    controlVisible(BaseModel.Companion.STATUS.LOADING)
+                    controlVisible(BaseModel.Companion.STATUS.SUCCESS)
                     callMainactivity()
                 }
                 BaseModel.Companion.STATUS.ERROR -> {

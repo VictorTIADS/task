@@ -23,7 +23,6 @@ class TaskListAdapter( val context: Context,val list: MutableList<TaskEntity>) :
 
 
         val task = list[position]
-
         val data = holder.itemView.itemview_lbl_date
         val descricao = holder.itemView.itemview_lbl_description
         val title  = holder.itemView.itemview_lbl_title
@@ -64,10 +63,7 @@ class TaskListAdapter( val context: Context,val list: MutableList<TaskEntity>) :
 
     override fun getItemCount() = list.size
 
-    fun removeItemAtPosition(viewHolder:RecyclerView.ViewHolder){
-        list.removeAt(viewHolder.adapterPosition)
-        notifyItemChanged(viewHolder.adapterPosition)
-    }
+
 
 }
 

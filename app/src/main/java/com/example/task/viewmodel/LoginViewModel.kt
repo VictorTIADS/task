@@ -100,7 +100,6 @@ class LoginViewModel(val service : RegisterRepository) : ViewModel() {
 
 
         })
-
     }
 
     private fun storeStringsOnSharedPreferences(user: MyUser?) {
